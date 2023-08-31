@@ -9,6 +9,7 @@ public enum PagesPathEnum {
     PRODUCT_PAGE("product"),
     USER_PROFILE_PAGE("userProfile"),
     SEARCH_PAGE("search"),
+    STATISTIC_PAGE("product-monitoring"),
     ERROR_PAGE("error");
 
     private final String path;
