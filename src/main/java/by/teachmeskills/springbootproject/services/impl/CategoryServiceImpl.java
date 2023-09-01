@@ -45,7 +45,7 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.findById(id);
     }
 
-    public ModelAndView returnCategoriesForHomePage() throws DBConnectionException {
+    public ModelAndView getCategoriesData() throws DBConnectionException {
         ModelMap modelMap = new ModelMap();
         modelMap.addAttribute("categories", categoryRepository.read());
         return new ModelAndView(PagesPathEnum.HOME_PAGE.getPath(), modelMap);

@@ -13,6 +13,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 <body>
-<h2>Чтение всех продуктов из базы данных заняло ${timeInMillis} секунд</h2>
+<h2>Чтение всех продуктов из базы данных заняло ${timeInMillis} секунд
+</h2>
 </body>
 </html>
