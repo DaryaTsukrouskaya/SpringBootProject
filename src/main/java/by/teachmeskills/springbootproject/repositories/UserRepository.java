@@ -11,4 +11,5 @@ public interface UserRepository extends BaseRepository<User> {
     void updatePassword(String password, String email) throws DBConnectionException;
 
     void updateEmail(String previousEmail, String newEmail) throws DBConnectionException;
+    void update(User user);
 }

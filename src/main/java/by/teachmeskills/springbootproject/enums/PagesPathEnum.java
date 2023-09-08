@@ -10,7 +10,9 @@ public enum PagesPathEnum {
     USER_PROFILE_PAGE("userProfile"),
     SEARCH_PAGE("search"),
     STATISTIC_PAGE("product-monitoring"),
-    ERROR_PAGE("error");
+    ERROR_PAGE("error"),
+    CHECKOUT_PAGE("checkout"),
+    EMPTY_CART_PAGE("emptyCart");
 
     private final String path;
 

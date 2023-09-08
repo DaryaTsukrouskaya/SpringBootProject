@@ -78,8 +78,21 @@ public class ProductServiceImpl implements ProductService {
         ModelMap modelMap = new ModelMap();
         cart.removeProduct(productId);
         modelMap.addAttribute("cart", cart);
+        if (cart.getProducts().isEmpty()) {
+            return new ModelAndView(PagesPathEnum.EMPTY_CART_PAGE.getPath());
+        }
         return new ModelAndView(PagesPathEnum.CART_PAGE.getPath(), modelMap);
     }
+    @Override
+    public ModelAndView clearCart( Cart cart) {
+        cart.clear();
+        ModelMap modelMap = new ModelMap();
+        if (cart.getProducts().isEmpty()) {
+            return new ModelAndView(PagesPathEnum.EMPTY_CART_PAGE.getPath());
+        }
+        return new ModelAndView(PagesPathEnum.CART_PAGE.getPath(), modelMap.addAttribute("cart", cart));
+    }
+
 
     @Override
     public ModelAndView findProductByIdForProductPage(int id) throws DBConnectionException {

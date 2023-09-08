@@ -1,5 +1,6 @@
 package by.teachmeskills.springbootproject.services;
 
+import by.teachmeskills.springbootproject.entities.Cart;
 import by.teachmeskills.springbootproject.entities.User;
 import by.teachmeskills.springbootproject.exceptions.DBConnectionException;
 import org.springframework.web.servlet.ModelAndView;
@@ -16,5 +17,7 @@ public interface UserService extends BaseService<User> {
     void updateEmail(String previousEmail, String newEmail) throws DBConnectionException;
 
     ModelAndView userServicePage(User user) throws DBConnectionException;
+    ModelAndView checkout(Cart cart);
+    void update(User user);
 
 }

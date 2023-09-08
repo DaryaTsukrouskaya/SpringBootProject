@@ -20,4 +20,15 @@ public class GlobalControllerExceptionHandler {
         model.addAllObjects(modelMap);
         return model;
     }
+
+    @ResponseStatus(HttpStatus.OK)
+    @ExceptionHandler(NoOrderAddressException.class)
+    public ModelAndView handleNoOrderAddressException(NoOrderAddressException ex) {
+        ModelMap modelMap = new ModelMap();
+        modelMap.addAttribute("state", ex.getMessage());
+        ModelAndView model = new ModelAndView();
+        model.setViewName(PagesPathEnum.CHECKOUT_PAGE.getPath());
+        model.addAllObjects(modelMap);
+        return model;
+    }
 }

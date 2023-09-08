@@ -18,4 +18,6 @@ public interface ProductService extends BaseService<Product> {
     ModelAndView deleteProductFromCart(int id, Cart cart);
 
     ModelAndView findProductByIdForProductPage(int id) throws DBConnectionException;
+
+    ModelAndView clearCart(Cart cart);
 }
