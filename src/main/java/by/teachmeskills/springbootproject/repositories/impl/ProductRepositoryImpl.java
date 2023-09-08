@@ -52,10 +52,20 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public List<Product> findProductsByKeywords(String words) throws DBConnectionException {
+    public List<Product> findProductsByKeywords(String words, int pageNumber, int maxResult) throws DBConnectionException {
         String searchParameter = "%" + words.trim() + "%";
         return entityManager.createQuery(" select p from Product p where p.name like: searchWords or p.description like: searchWords order by p.name asc").
-                setParameter("searchWords", searchParameter).getResultList();
+                setParameter("searchWords", searchParameter).setFirstResult((pageNumber - 1) * maxResult).setMaxResults(maxResult).getResultList();
+
 
     }
+
+    @Override
+    public Long findProductsQuantityByKeywords(String words) throws DBConnectionException {
+        String searchParameter = "%" + words.trim() + "%";
+        Long totalRecords = (Long) entityManager.createQuery(" select count (*) from Product p where p.name like: searchWords or p.description like: searchWords order by p.name asc").
+                setParameter("searchWords", searchParameter).getSingleResult();
+        return totalRecords;
+    }
+
 }

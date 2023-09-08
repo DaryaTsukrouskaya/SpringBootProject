@@ -64,5 +64,14 @@
         </div>
     </div>
 </c:forEach>
+<nav>
+    <ul class="pagination">
+        <li class="page-item"><a class="page-link" href="/search/prev">Назад</a></li>
+        <li class="page-item"><a class="page-link" href="/search/1">1</a></li>
+        <li class="page-item"><a class="page-link" href="/search/2">2</a></li>
+        <li class="page-item"><a class="page-link" href="/search/3">3</a></li>
+        <li class="page-item"><a class="page-link" href="/search/next">Вперед</a></li>
+    </ul>
+</nav>
 </body>
 </html>
