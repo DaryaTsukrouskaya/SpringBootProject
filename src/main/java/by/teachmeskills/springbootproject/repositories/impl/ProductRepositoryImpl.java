@@ -56,8 +56,6 @@ public class ProductRepositoryImpl implements ProductRepository {
         String searchParameter = "%" + words.trim() + "%";
         return entityManager.createQuery(" select p from Product p where p.name like: searchWords or p.description like: searchWords order by p.name asc").
                 setParameter("searchWords", searchParameter).setFirstResult((pageNumber - 1) * maxResult).setMaxResults(maxResult).getResultList();
-
-
     }
 
     @Override
