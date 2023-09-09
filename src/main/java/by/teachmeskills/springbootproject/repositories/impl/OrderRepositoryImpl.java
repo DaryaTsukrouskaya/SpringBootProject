@@ -27,8 +27,7 @@ public class OrderRepositoryImpl implements OrderRepository {
 
     @Override
     public void create(Order order) throws DBConnectionException {
-        Session session = entityManager.unwrap(Session.class);
-        session.persist(order);
+        entityManager.persist(order);
     }
 
     @Override
