@@ -7,9 +7,8 @@ import by.teachmeskills.springbootproject.exceptions.UserAlreadyExistsException;
 import by.teachmeskills.springbootproject.repositories.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
-import org.hibernate.Session;
-import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -20,6 +19,7 @@ import java.util.List;
 public class UserRepositoryImpl implements UserRepository {
     @PersistenceContext
     private final EntityManager entityManager;
+
     @Autowired
     public UserRepositoryImpl(EntityManager entityManager) {
         this.entityManager = entityManager;
@@ -28,15 +28,13 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void create(User user) throws DBConnectionException, UserAlreadyExistsException {
-        Session session = entityManager.unwrap(Session.class);
-        session.persist(user);
+        entityManager.persist(user);
     }
 
     @Override
     public void delete(int id) throws DBConnectionException {
-        Session session = entityManager.unwrap(Session.class);
-        User user = session.find(User.class, id);
-        session.remove(user);
+        User user = entityManager.find(User.class, id);
+        entityManager.remove(user);
     }
 
     @Override
@@ -51,17 +49,15 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User findByEmailAndPassword(String email, String password) throws DBConnectionException {
-        Session session = entityManager.unwrap(Session.class);
-        Query query = session.createQuery("select u from User u where u.email =: email and u.password =: password");
+        Query query = entityManager.createQuery("select u from User u where u.email =: email and u.password =: password");
         query.setParameter("email", email);
         query.setParameter("password", password);
-        return (User) query.uniqueResult();
+        return (User) query.getSingleResult();
     }
 
     @Override
     public void updatePassword(String password, String email) throws DBConnectionException {
-        Session session = entityManager.unwrap(Session.class);
-        Query query = session.createQuery("update User u set u.password=:password where u.email=: email");
+        Query query = entityManager.createQuery("update User u set u.password=:password where u.email=: email");
         query.setParameter("password", password);
         query.setParameter("email", email);
         query.executeUpdate();
@@ -70,14 +66,12 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void update(User user) {
-        Session session = entityManager.unwrap(Session.class);
-        session.merge(user);
+        entityManager.merge(user);
     }
 
     @Override
     public void updateEmail(String previousEmail, String newEmail) throws DBConnectionException {
-        Session session = entityManager.unwrap(Session.class);
-        Query query = session.createQuery("update User u set u.email=:newEmail where u.email=: previousEmail");
+        Query query = entityManager.createQuery("update User u set u.email=:newEmail where u.email=: previousEmail");
         query.setParameter("newEmail", newEmail);
         query.setParameter("previousEmail", previousEmail);
         query.executeUpdate();

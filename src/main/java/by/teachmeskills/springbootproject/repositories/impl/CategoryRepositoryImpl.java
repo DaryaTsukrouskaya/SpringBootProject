@@ -3,12 +3,10 @@ package by.teachmeskills.springbootproject.repositories.impl;
 import by.teachmeskills.springbootproject.entities.Category;
 import by.teachmeskills.springbootproject.exceptions.DBConnectionException;
 import by.teachmeskills.springbootproject.repositories.CategoryRepository;
-import org.hibernate.Session;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -27,15 +25,13 @@ public class CategoryRepositoryImpl implements CategoryRepository {
 
     @Override
     public void create(Category category) throws DBConnectionException {
-        Session session = entityManager.unwrap(Session.class);
-        session.persist(category);
+        entityManager.persist(category);
     }
 
     @Override
     public void delete(int id) throws DBConnectionException {
-        Session session = entityManager.unwrap(Session.class);
-        Category category = session.get(Category.class, id);
-        session.remove(category);
+        Category category = entityManager.find(Category.class, id);
+        entityManager.remove(category);
     }
 
     @Override

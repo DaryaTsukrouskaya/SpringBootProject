@@ -26,8 +26,7 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
     public void create(Product product) throws DBConnectionException {
-        Session session = entityManager.unwrap(Session.class);
-        session.persist(product);
+        entityManager.persist(product);
     }
 
     @Override
