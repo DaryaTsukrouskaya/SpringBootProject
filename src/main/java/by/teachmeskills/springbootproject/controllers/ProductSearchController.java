@@ -33,29 +33,21 @@ public class ProductSearchController {
 
     @PostMapping
     public ModelAndView searchResult(@ModelAttribute("keyWords") KeyWords keyWords) throws DBConnectionException {
-        return productService.productsForSearchPage(keyWords.getCurrentPageNumber(), keyWords.getKeyWords());
-    }
-
-    @GetMapping("/next")
-    public ModelAndView prevSearchPage(@SessionAttribute("keyWords") KeyWords keyWords) throws DBConnectionException {
-        if (keyWords.getCurrentPageNumber() < 3) {
-            keyWords.setCurrentPageNumber(keyWords.getCurrentPageNumber() + 1);
-        }
-        return productService.productsForSearchPage(keyWords.getCurrentPageNumber(), keyWords.getKeyWords());
-    }
-
-    @GetMapping("/prev")
-    public ModelAndView nextSearchPage(@SessionAttribute("keyWords") KeyWords keyWords) throws DBConnectionException {
-        if (keyWords.getCurrentPageNumber() > 1) {
-            keyWords.setCurrentPageNumber(keyWords.getCurrentPageNumber() - 1);
-        }
-        return productService.productsForSearchPage(keyWords.getCurrentPageNumber(), keyWords.getKeyWords());
+        return productService.searchProductsPaged(keyWords.getCurrentPageNumber(), keyWords.getKeyWords());
     }
 
     @GetMapping("/{pageNumber}")
     public ModelAndView certainSearchPage(@PathVariable int pageNumber, @SessionAttribute("keyWords") KeyWords keyWords) throws DBConnectionException {
         keyWords.setCurrentPageNumber(pageNumber);
-        return productService.productsForSearchPage(pageNumber, keyWords.getKeyWords());
+        if (keyWords.getCurrentPageNumber() > 3) {
+            keyWords.setCurrentPageNumber(keyWords.getCurrentPageNumber() - 1);
+            pageNumber -= 1;
+        }
+        if (keyWords.getCurrentPageNumber() < 1) {
+            keyWords.setCurrentPageNumber(keyWords.getCurrentPageNumber() + 1);
+            pageNumber += 1;
+        }
+        return productService.searchProductsPaged(pageNumber, keyWords.getKeyWords());
     }
 
     @ModelAttribute("keyWords")
