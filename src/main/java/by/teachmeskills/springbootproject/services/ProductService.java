@@ -19,5 +19,5 @@ public interface ProductService extends BaseService<Product> {
 
     ModelAndView clearCart(Cart cart);
 
-    public ModelAndView productsForSearchPage(int pageNumber, String keyWords) throws DBConnectionException;
+    public ModelAndView searchProductsPaged(int pageNumber, String keyWords) throws DBConnectionException;
 }

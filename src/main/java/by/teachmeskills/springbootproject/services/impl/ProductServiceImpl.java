@@ -95,7 +95,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ModelAndView productsForSearchPage(int pageNumber, String keyWords) throws DBConnectionException {
+    public ModelAndView searchProductsPaged(int pageNumber, String keyWords) throws DBConnectionException {
         Long totalRecords;
         List<Product> products;
         int pageMaxResult;
