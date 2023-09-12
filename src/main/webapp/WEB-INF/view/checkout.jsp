@@ -17,7 +17,7 @@
 <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand">Корзина</a>
+            <a class="navbar-brand">Оформление заказа</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse"
                     data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                     aria-label="Toggle navigation">
@@ -49,7 +49,7 @@
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <c:set var="cart" value="${cart}"/>
 <c:forEach items="${cart.getProducts()}" var="product">
-    <div class="card mb-3" style="max-width: 540px;margin:10px;">
+    <div class="card mb-3 w-50 mx-auto" style="max-width: 680px;margin:10px;">
         <div class="row g-0">
             <div class="col-md-4">
                 <img src="${contextPath}/images/${product.getImagePath()}" class="img-fluid rounded-start"
@@ -60,15 +60,28 @@
                     <h5 class="card-title">${product.getName()}</h5>
                     <p class="card-text">${product.getDescription()}</p>
                     <p class="card-text">Цена: <fmt:formatNumber value="${product.getPrice()}" type="currency"/></p>
-                    <a href="/cart/delete?product_id=${product.getId()}"
-                       class="btn btn-dark btn-lg">Удалить</a>
                 </div>
             </div>
         </div>
     </div>
 </c:forEach>
-<a href="/cart/checkout" class="btn btn-dark btn-lg" style="margin: 10px">Оформить заказ</a>
-<a href="/cart/clear" class="btn btn-dark btn-lg" style="margin: 10px">Очистить
-    корзину</a>
+<form method="post" action="/cart/createOrder">
+    <div class="form-group form-group w-50 mx-auto">
+        <label for="inputAddress" text-align="justify">Ведите адрес для заказа</label>
+        <input type="text" class="form-control" id="inputAddress" placeholder="Город,улица,дом,квартира"
+               name="address">
+        <span>${state}</span><br>
+    </div>
+    <div class="float-end">
+        <p class="w-50 mx-auto align-items-center">
+            <span>Итоговая сумма заказа: </span>
+            <span class="lead fw-normal"> <fmt:formatNumber value="${cart.getTotalPrice()}" type="currency"/></span>
+        </p>
+    </div>
+    <div class="text-center">
+        <button class="btn btn-dark btn-lg" type="submit" style="margin: 10px">Оформить заказ</button>
+    </div>
+</form>
 </body>
 </html>
+

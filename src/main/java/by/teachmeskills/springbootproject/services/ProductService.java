@@ -11,11 +11,13 @@ public interface ProductService extends BaseService<Product> {
 
     ModelAndView getProductsByCategory(int id) throws DBConnectionException;
 
-    ModelAndView findProductsByKeywords(String words) throws DBConnectionException;
-
     ModelAndView addProductToCart(int id, Cart cart) throws DBConnectionException;
 
     ModelAndView deleteProductFromCart(int id, Cart cart);
 
     ModelAndView findProductByIdForProductPage(int id) throws DBConnectionException;
+
+    ModelAndView clearCart(Cart cart);
+
+    public ModelAndView searchProductsPaged(int pageNumber, String keyWords) throws DBConnectionException;
 }

@@ -1,5 +1,6 @@
 package by.teachmeskills.springbootproject.services.impl;
 
+import by.teachmeskills.springbootproject.entities.Cart;
 import by.teachmeskills.springbootproject.entities.Order;
 import by.teachmeskills.springbootproject.entities.Product;
 import by.teachmeskills.springbootproject.entities.User;
@@ -107,21 +108,19 @@ public class UserServiceImpl implements UserService {
     public ModelAndView userServicePage(User user) throws DBConnectionException {
         ModelMap modelMap = new ModelMap();
         modelMap.addAttribute("user", user);
-        List<Product> productList1 = new ArrayList<>();
-        List<Product> productList2 = new ArrayList<>();
-        productList1.add(productService.findById(1));
-        productList1.add(productService.findById(2));
-        productList1.add(productService.findById(3));
-        productList1.add(productService.findById(4));
-        productList2.add(productService.findById(3));
-        productList2.add(productService.findById(1));
-
-        Order order1 = new Order(1, LocalDateTime.now(), productList1);
-        Order order2 = new Order(2, LocalDateTime.now(), productList2);
-        List<Order> userOrders = new ArrayList<>();
-        userOrders.add(order1);
-        userOrders.add(order2);
-        modelMap.addAttribute("userOrders", userOrders);
+        modelMap.addAttribute("userOrders", user.getOrders());
         return new ModelAndView(PagesPathEnum.USER_PROFILE_PAGE.getPath(), modelMap);
+    }
+
+    @Override
+    public ModelAndView checkout(Cart cart) {
+        ModelMap modelMap = new ModelMap();
+        modelMap.addAttribute("cart", cart);
+        return new ModelAndView(PagesPathEnum.CHECKOUT_PAGE.getPath(), modelMap);
+    }
+
+    @Override
+    public void update(User user) {
+        userRepository.update(user);
     }
 }

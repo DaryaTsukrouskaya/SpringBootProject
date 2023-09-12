@@ -11,6 +11,8 @@ public interface ProductRepository extends BaseRepository<Product> {
 
     List<Product> getProductsByCategory(int id) throws DBConnectionException;
 
-    List<Product> findProductsByKeywords(String words) throws DBConnectionException;
+    List<Product> findProductsByKeywords(String words, int pageNumber, int maxResult) throws DBConnectionException;
+
+    Long findProductsQuantityByKeywords(String words) throws DBConnectionException;
 
 }

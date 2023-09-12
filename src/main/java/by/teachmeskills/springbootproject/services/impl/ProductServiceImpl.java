@@ -54,16 +54,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ModelAndView findProductsByKeywords(String words) throws DBConnectionException {
-        ModelMap modelMap = new ModelMap();
-        if (words != null) {
-            List<Product> products = productRepository.findProductsByKeywords(words);
-            modelMap.addAttribute("products", products);
-        }
-        return new ModelAndView(PagesPathEnum.SEARCH_PAGE.getPath(), modelMap);
-    }
-
-    @Override
     public ModelAndView addProductToCart(int productId, Cart cart) throws DBConnectionException {
         ModelMap modelMap = new ModelMap();
         Product product = findById(productId);
@@ -78,8 +68,22 @@ public class ProductServiceImpl implements ProductService {
         ModelMap modelMap = new ModelMap();
         cart.removeProduct(productId);
         modelMap.addAttribute("cart", cart);
+        if (cart.getProducts().isEmpty()) {
+            return new ModelAndView(PagesPathEnum.EMPTY_CART_PAGE.getPath());
+        }
         return new ModelAndView(PagesPathEnum.CART_PAGE.getPath(), modelMap);
     }
+
+    @Override
+    public ModelAndView clearCart(Cart cart) {
+        cart.clear();
+        ModelMap modelMap = new ModelMap();
+        if (cart.getProducts().isEmpty()) {
+            return new ModelAndView(PagesPathEnum.EMPTY_CART_PAGE.getPath());
+        }
+        return new ModelAndView(PagesPathEnum.CART_PAGE.getPath(), modelMap.addAttribute("cart", cart));
+    }
+
 
     @Override
     public ModelAndView findProductByIdForProductPage(int id) throws DBConnectionException {
@@ -88,5 +92,20 @@ public class ProductServiceImpl implements ProductService {
         modelMap.addAttribute("categoryName", product.getName());
         modelMap.addAttribute("product", product);
         return new ModelAndView(PagesPathEnum.PRODUCT_PAGE.getPath(), modelMap);
+    }
+
+    @Override
+    public ModelAndView searchProductsPaged(int pageNumber, String keyWords) throws DBConnectionException {
+        Long totalRecords;
+        List<Product> products;
+        int pageMaxResult;
+        ModelMap modelMap = new ModelMap();
+        if (keyWords != null) {
+            totalRecords = productRepository.findProductsQuantityByKeywords(keyWords);
+            pageMaxResult = (int) (totalRecords / 3);
+            products = productRepository.findProductsByKeywords(keyWords, pageNumber, pageMaxResult);
+            modelMap.addAttribute("products", products);
+        }
+        return new ModelAndView(PagesPathEnum.SEARCH_PAGE.getPath(), modelMap);
     }
 }

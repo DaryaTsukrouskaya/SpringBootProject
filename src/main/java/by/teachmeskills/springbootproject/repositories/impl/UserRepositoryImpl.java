@@ -5,81 +5,81 @@ import by.teachmeskills.springbootproject.entities.User;
 import by.teachmeskills.springbootproject.exceptions.DBConnectionException;
 import by.teachmeskills.springbootproject.exceptions.UserAlreadyExistsException;
 import by.teachmeskills.springbootproject.repositories.UserRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
+import org.hibernate.Session;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-
-import java.sql.Timestamp;
 import java.util.List;
 
 @Repository
+@Transactional
 public class UserRepositoryImpl implements UserRepository {
-    private final JdbcTemplate jdbcTemplate;
-    private final static String CREATE_USER_QUERY = "INSERT INTO users(name,surname,birthDate,email,password) VALUES(?,?,?,?,?)";
-    private final static String GET_USER_BY_ID_QUERY = "SELECT * FROM users WHERE id=?";
-    private final static String GET_USER_BY_EMAIL_AND_PASSWORD_QUERY = "SELECT * FROM users WHERE email=? AND password=?";
-    private final static String DELETE_USER_QUERY = "DELETE FROM users WHERE id=?";
-    private final static String GET_ALL_USERS_QUERY = "SELECT * FROM users";
-    private final static String UPDATE_USER_PASSWORD_QUERY = "UPDATE users SET password=? WHERE email=?";
-    private final static String UPDATE_USER_EMAIL_QUERY = "UPDATE users SET email=? WHERE email=?";
-
+    @PersistenceContext
+    private final EntityManager entityManager;
     @Autowired
-    public UserRepositoryImpl(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public UserRepositoryImpl(EntityManager entityManager) {
+        this.entityManager = entityManager;
     }
+
 
     @Override
     public void create(User user) throws DBConnectionException, UserAlreadyExistsException {
-        try {
-            if (findByEmailAndPassword(user.getEmail(), user.getPassword()) != null) {
-                throw new UserAlreadyExistsException("Такой пользователь уже существует!");
-            }
-        } catch (EmptyResultDataAccessException ex) {
-            jdbcTemplate.update(CREATE_USER_QUERY, user.getName(), user.getSurname(),
-                    Timestamp.valueOf(user.getBirthDate().atStartOfDay()), user.getEmail(), user.getPassword());
-        }
+        Session session = entityManager.unwrap(Session.class);
+        session.persist(user);
     }
 
     @Override
     public void delete(int id) throws DBConnectionException {
-        jdbcTemplate.update(DELETE_USER_QUERY, id);
+        Session session = entityManager.unwrap(Session.class);
+        User user = session.find(User.class, id);
+        session.remove(user);
     }
 
     @Override
     public List<User> read() throws DBConnectionException {
-        return jdbcTemplate.query(GET_ALL_USERS_QUERY, (rs, rowNum) -> User.builder()
-                .id(rs.getInt("id")).name(rs.getString("name")).surname(rs.getString("surname")).
-                birthDate(rs.getTimestamp("birthDate").toLocalDateTime().toLocalDate()).email(rs.getString("email"))
-                .password(rs.getString("password")).build());
+        return entityManager.createQuery("select u from User u").getResultList();
     }
 
     @Override
     public User findById(int id) throws DBConnectionException {
-        return jdbcTemplate.queryForObject(GET_USER_BY_ID_QUERY, (RowMapper<User>) (rs, rowNum) -> User.builder()
-                .id(rs.getInt("id")).name(rs.getString("name")).surname(rs.getString("surname")).
-                birthDate(rs.getTimestamp("birthDate").toLocalDateTime().toLocalDate()).email(rs.getString("email"))
-                .password(rs.getString("password")).build(), id);
+        return entityManager.find(User.class, id);
     }
 
     @Override
     public User findByEmailAndPassword(String email, String password) throws DBConnectionException {
-        return jdbcTemplate.queryForObject(GET_USER_BY_EMAIL_AND_PASSWORD_QUERY, (RowMapper<User>) (rs, rowNum) -> User.builder()
-                .id(rs.getInt("id")).name(rs.getString("name")).surname(rs.getString("surname")).
-                birthDate(rs.getTimestamp("birthDate").toLocalDateTime().toLocalDate()).email(rs.getString("email"))
-                .password(rs.getString("password")).build(), email, password);
+        Session session = entityManager.unwrap(Session.class);
+        Query query = session.createQuery("select u from User u where u.email =: email and u.password =: password");
+        query.setParameter("email", email);
+        query.setParameter("password", password);
+        return (User) query.uniqueResult();
     }
 
     @Override
     public void updatePassword(String password, String email) throws DBConnectionException {
-        jdbcTemplate.update(UPDATE_USER_PASSWORD_QUERY, password, email);
+        Session session = entityManager.unwrap(Session.class);
+        Query query = session.createQuery("update User u set u.password=:password where u.email=: email");
+        query.setParameter("password", password);
+        query.setParameter("email", email);
+        query.executeUpdate();
 
     }
 
     @Override
+    public void update(User user) {
+        Session session = entityManager.unwrap(Session.class);
+        session.merge(user);
+    }
+
+    @Override
     public void updateEmail(String previousEmail, String newEmail) throws DBConnectionException {
-        jdbcTemplate.update(UPDATE_USER_EMAIL_QUERY, newEmail, previousEmail);
+        Session session = entityManager.unwrap(Session.class);
+        Query query = session.createQuery("update User u set u.email=:newEmail where u.email=: previousEmail");
+        query.setParameter("newEmail", newEmail);
+        query.setParameter("previousEmail", previousEmail);
+        query.executeUpdate();
     }
 }
