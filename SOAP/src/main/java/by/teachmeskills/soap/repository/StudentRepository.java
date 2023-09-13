@@ -30,6 +30,9 @@ public class StudentRepository {
         student1.setCourse(1);
         student2.setCourse(2);
         student3.setCourse(3);
+        students.add(student1);
+        students.add(student2);
+        students.add(student3);
     }
 
     public Student findStudent(String name) {
