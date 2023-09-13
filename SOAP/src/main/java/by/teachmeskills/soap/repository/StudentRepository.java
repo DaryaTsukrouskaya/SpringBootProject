@@ -1,4 +1,4 @@
-package by.teachmeskills.soap.Repository;
+package by.teachmeskills.soap.repository;
 
 
 import by.teachmeskills.soap.model.Student;

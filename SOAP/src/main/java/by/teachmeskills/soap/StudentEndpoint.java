@@ -1,7 +1,7 @@
 package by.teachmeskills.soap;
 
 
-import by.teachmeskills.soap.Repository.StudentRepository;
+import by.teachmeskills.soap.repository.StudentRepository;
 import by.teachmeskills.soap.model.GetStudentRequest;
 import by.teachmeskills.soap.model.GetStudentResponse;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
