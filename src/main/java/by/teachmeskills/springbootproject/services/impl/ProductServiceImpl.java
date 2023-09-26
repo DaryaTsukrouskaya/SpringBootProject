@@ -31,7 +31,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void create(Product product) throws DBConnectionException, UserAlreadyExistsException {
+    public void create(Product product) throws DBConnectionException{
         productRepository.create(product);
 
     }

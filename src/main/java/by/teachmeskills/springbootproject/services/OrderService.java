@@ -15,5 +15,5 @@ public interface OrderService extends BaseService<Order> {
     Order findById(int id) throws DBConnectionException;
 
     List<Order> findByUserId(int id) throws DBConnectionException;
-    ModelAndView createUserOrder(User user, Cart cart, String address) throws DBConnectionException, UserAlreadyExistsException, NoOrderAddressException;
+    ModelAndView createUserOrder(User user, Cart cart, String address) throws DBConnectionException, NoOrderAddressException;
 }
