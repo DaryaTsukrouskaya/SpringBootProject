@@ -87,7 +87,7 @@ public class CategoryServiceImpl implements CategoryService {
         if (Optional.ofNullable(file).isPresent()) {
             try (Reader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
                 CsvToBean<Category> csvToBean = new CsvToBeanBuilder<Category>(reader).withType(Category.class).
-                        withIgnoreLeadingWhiteSpace(true).withSeparator(',').build();
+                        withIgnoreLeadingWhiteSpace(true).withSeparator(';').build();
                 return csvToBean.parse();
             } catch (IOException e) {
                 log.error("Exception occurred during csv parsing:" + e.getMessage());
@@ -99,15 +99,13 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void saveCategoriesToFile(HttpServletResponse servletResponse) throws CsvRequiredFieldEmptyException, CsvDataTypeMismatchException, DBConnectionException {
+    public void saveCategoriesToFile(HttpServletResponse servletResponse) throws CsvRequiredFieldEmptyException, CsvDataTypeMismatchException, DBConnectionException, IOException {
         List<Category> categories = categoryRepository.read();
         try (Writer writer = new OutputStreamWriter(servletResponse.getOutputStream())) {
             StatefulBeanToCsv<Category> statefulBeanToCsv = new StatefulBeanToCsvBuilder<Category>(writer).withSeparator(';').build();
             servletResponse.setContentType("text/csv");
             servletResponse.addHeader("Content-Disposition", "attachment; filename=" + "categories.csv");
             statefulBeanToCsv.write(categories);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 }

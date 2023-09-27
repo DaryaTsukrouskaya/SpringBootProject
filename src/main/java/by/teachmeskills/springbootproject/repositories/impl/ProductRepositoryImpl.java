@@ -30,6 +30,11 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
+    public void update(Product product) {
+        entityManager.merge(product);
+    }
+
+    @Override
     public void delete(int id) throws DBConnectionException {
         Product product = entityManager.find(Product.class, id);
         entityManager.remove(product);
