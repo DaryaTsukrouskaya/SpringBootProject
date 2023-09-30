@@ -32,7 +32,7 @@ public class CategoryRepositoryImpl implements CategoryRepository {
 
     @Override
     public void update(Category category) {
-            entityManager.merge(category);
+        entityManager.merge(category);
     }
 
     @Override
@@ -49,5 +49,10 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     @Override
     public Category findById(int id) throws DBConnectionException {
         return entityManager.find(Category.class, id);
+    }
+
+    @Override
+    public Category findByName(String name) {
+        return (Category) entityManager.createQuery("select c from Category c where c.name =:name").setParameter("name", name).getSingleResult();
     }
 }

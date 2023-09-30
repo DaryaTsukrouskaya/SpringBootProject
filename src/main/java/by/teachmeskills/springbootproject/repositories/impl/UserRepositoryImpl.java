@@ -27,7 +27,7 @@ public class UserRepositoryImpl implements UserRepository {
 
 
     @Override
-    public void create(User user) throws DBConnectionException, UserAlreadyExistsException {
+    public void create(User user) throws DBConnectionException{
         entityManager.persist(user);
     }
 

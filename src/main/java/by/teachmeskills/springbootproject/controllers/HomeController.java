@@ -32,7 +32,7 @@ public class HomeController {
         return categoryService.getCategoriesData();
     }
 
-    @GetMapping("/loadCsvFile")
+    @PostMapping("/loadCsvFile")
     public void loadToFile(HttpServletResponse servletResponse) throws CsvRequiredFieldEmptyException, CsvDataTypeMismatchException, DBConnectionException, IOException {
         categoryService.saveCategoriesToFile(servletResponse);
     }

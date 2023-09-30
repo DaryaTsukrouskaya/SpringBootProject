@@ -61,7 +61,18 @@
         </div>
     </c:if>
 </div>
-</div>
+<br>
+<form method="POST" action="/home/loadFromFile" enctype="multipart/form-data"
+      class="file-import">
+    <label for="file-upload" class="custom-file-upload"
+           style="padding: 15px;margin: 0px 0px 15px 15px;border: 1px solid #ccc">
+        <input id="file-upload" name="file" type="file" class="title" accept=".csv">
+        <button type="submit" class="btn btn-dark">Импортировать категории</button>
+    </label>
+</form>
+<form method="POST" action="/home/loadCsvFile">
+    <button type="submit" class="btn btn-dark" style="margin: 15px">Экспортировать категории</button>
+</form>
 </body>
 </html>
 

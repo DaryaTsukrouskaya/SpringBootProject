@@ -27,7 +27,7 @@ public interface ProductService extends BaseService<Product> {
 
     public ModelAndView searchProductsPaged(int pageNumber, String keyWords) throws DBConnectionException;
 
-    void saveCategoryProductsToFile(HttpServletResponse servletResponse) throws DBConnectionException, IOException, CsvRequiredFieldEmptyException, CsvDataTypeMismatchException;
+    void saveCategoryProductsToFile(HttpServletResponse servletResponse,int id) throws DBConnectionException, IOException, CsvRequiredFieldEmptyException, CsvDataTypeMismatchException;
 
     ModelAndView saveProductsFromFile(MultipartFile file, int id) throws DBConnectionException;
 }

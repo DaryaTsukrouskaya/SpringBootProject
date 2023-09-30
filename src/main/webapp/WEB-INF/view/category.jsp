@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>${categoryName}</title>
+    <title>${category.getName()}</title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
@@ -16,7 +16,7 @@
 <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand">${categoryName}</a>
+            <a class="navbar-brand">${category.getName()}</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse"
                     data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                     aria-label="Toggle navigation">
@@ -50,7 +50,7 @@
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <div class="row">
-    <c:forEach items="${categoryProducts}" var="product">
+    <c:forEach items="${category.getProducts()}" var="product">
         <div class="col d-flex justify-content-center">
             <a href="/product/${product.getId()}" style="text-decoration:none;color:inherit">
                 <div class="card" style="width: 19rem; margin: 20px">
@@ -67,6 +67,16 @@
         </div>
     </c:forEach>
 </div>
-
+<form method="POST" action="/category/loadFromFile/${category.getId()}" enctype="multipart/form-data"
+      class="file-import">
+    <label for="file-upload" class="custom-file-upload"
+           style="padding: 15px;margin: 0px 0px 15px 15px;border: 1px solid #ccc">
+        <input id="file-upload" name="file" type="file" class="title" accept=".csv">
+        <button type="submit" class="btn btn-dark">Импортировать продукты категории</button>
+    </label>
+</form>
+<form method="POST" action="/category/loadCsvFile/${category.getId()}">
+    <button type="submit" class="btn btn-dark" style="margin: 15px">Экспортировать продукты категории</button>
+</form>
 </body>
 </html>

@@ -2,6 +2,7 @@ package by.teachmeskills.springbootproject.services.impl;
 
 
 import by.teachmeskills.springbootproject.entities.Category;
+import by.teachmeskills.springbootproject.entities.Product;
 import by.teachmeskills.springbootproject.enums.PagesPathEnum;
 import by.teachmeskills.springbootproject.exceptions.DBConnectionException;
 import by.teachmeskills.springbootproject.exceptions.UserAlreadyExistsException;
@@ -28,6 +29,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;

@@ -33,9 +33,9 @@ public class CategoryController {
         return productService.getProductsByCategory(id);
     }
 
-    @GetMapping("/loadCsvFile")
+    @PostMapping("/loadCsvFile/{id}")
     public void loadToFile(HttpServletResponse servletResponse, @PathVariable int id) throws CsvRequiredFieldEmptyException, CsvDataTypeMismatchException, DBConnectionException, IOException {
-        productService.saveCategoryProductsToFile(servletResponse);
+        productService.saveCategoryProductsToFile(servletResponse, id);
     }
 
     @PostMapping("/loadFromFile/{id}")

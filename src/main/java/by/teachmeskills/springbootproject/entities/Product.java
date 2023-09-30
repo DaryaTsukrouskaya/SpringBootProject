@@ -25,21 +25,21 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "products")
 public class Product extends BaseEntity {
-    @Column(name="name")
+    @Column(name = "name")
     @NotNull
     @Size(min = 1, max = 60, message = "Пустое или длиннее 50 символов")
     private String name;
-    @Column(name="description")
+    @Column(name = "description")
     @NotNull(message = "поле описание картинки продукта не должно быть пустым")
     private String description;
-    @Column(name="imagePath")
+    @Column(name = "imagePath")
     @NotNull(message = "поле путь к картинке продукта не должно быть пустым")
     private String imagePath;
     @ManyToOne(optional = false)
     @JoinColumn(name = "categoryId", nullable = false)
     private Category category;
     @NotNull
-    @Column(name="price")
+    @Column(name = "price")
     @Digits(integer = 6, fraction = 3, message = "не соответствует формату цены")
     private BigDecimal price;
 

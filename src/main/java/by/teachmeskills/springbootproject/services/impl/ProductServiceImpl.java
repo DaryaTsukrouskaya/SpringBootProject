@@ -1,5 +1,7 @@
 package by.teachmeskills.springbootproject.services.impl;
 
+import by.teachmeskills.springbootproject.converters.ProductConverter;
+import by.teachmeskills.springbootproject.csv.ProductCsv;
 import by.teachmeskills.springbootproject.entities.Cart;
 import by.teachmeskills.springbootproject.entities.Category;
 import by.teachmeskills.springbootproject.entities.Product;
@@ -7,6 +9,7 @@ import by.teachmeskills.springbootproject.enums.PagesPathEnum;
 import by.teachmeskills.springbootproject.exceptions.DBConnectionException;
 import by.teachmeskills.springbootproject.repositories.ProductRepository;
 import by.teachmeskills.springbootproject.repositories.impl.ProductRepositoryImpl;
+import by.teachmeskills.springbootproject.services.CategoryService;
 import by.teachmeskills.springbootproject.services.ProductService;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
@@ -19,7 +22,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -37,10 +39,14 @@ import java.util.Optional;
 @Slf4j
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
+    private final ProductConverter productConverter;
+    private final CategoryService categoryService;
 
     @Autowired
-    public ProductServiceImpl(ProductRepositoryImpl productRepository) {
+    public ProductServiceImpl(ProductRepositoryImpl productRepository, ProductConverter productConverter, CategoryService categoryService) {
         this.productRepository = productRepository;
+        this.productConverter = productConverter;
+        this.categoryService = categoryService;
     }
 
 
@@ -68,7 +74,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ModelAndView getProductsByCategory(int id) throws DBConnectionException {
         ModelMap modelMap = new ModelMap();
-        modelMap.addAttribute("categoryProducts", productRepository.getProductsByCategory(id));
+        Category category = categoryService.findById(id);
+        modelMap.addAttribute("category", category);
         return new ModelAndView(PagesPathEnum.CATEGORY_PAGE.getPath(), modelMap);
     }
 
@@ -130,22 +137,28 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ModelAndView saveProductsFromFile(MultipartFile file, int id) throws DBConnectionException {
-        List<Product> csvProducts = parseCsv(file);
+        List<ProductCsv> csvProducts = parseCsv(file);
         ModelMap modelMap = new ModelMap();
-        if (Optional.ofNullable(csvProducts).isPresent()) {
-            for (Product csvProduct : csvProducts) {
-                productRepository.create(csvProduct);
+        List<Product> products = csvProducts.stream().map(productConverter::convertFromCsv).toList();
+        products.stream().forEach(c -> {
+            try {
+                c.setCategory(categoryService.findById(id));
+            } catch (DBConnectionException e) {
+                throw new RuntimeException(e);
             }
-            modelMap.addAttribute("categoryProducts", productRepository.getProductsByCategory(id));
-            return new ModelAndView(PagesPathEnum.CATEGORY_PAGE.getPath(), modelMap);
+        });
+        for (Product product : products) {
+            productRepository.create(product);
         }
+        Category category = categoryService.findById(id);
+        modelMap.addAttribute("category", category);
         return new ModelAndView(PagesPathEnum.CATEGORY_PAGE.getPath(), modelMap);
     }
 
-    private List<Product> parseCsv(MultipartFile file) {
+    private List<ProductCsv> parseCsv(MultipartFile file) {
         if (Optional.ofNullable(file).isPresent()) {
             try (Reader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
-                CsvToBean<Product> csvToBean = new CsvToBeanBuilder<Product>(reader).withType(Product.class).
+                CsvToBean<ProductCsv> csvToBean = new CsvToBeanBuilder<ProductCsv>(reader).withType(ProductCsv.class).
                         withIgnoreLeadingWhiteSpace(true).withSeparator(';').build();
                 return csvToBean.parse();
             } catch (IOException e) {
@@ -158,13 +171,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void saveCategoryProductsToFile(HttpServletResponse servletResponse) throws DBConnectionException, IOException, CsvRequiredFieldEmptyException, CsvDataTypeMismatchException {
-        List<Product> products = productRepository.read();
+    public void saveCategoryProductsToFile(HttpServletResponse servletResponse, int id) throws DBConnectionException, IOException, CsvRequiredFieldEmptyException, CsvDataTypeMismatchException {
+        List<Product> products = productRepository.getProductsByCategory(id);
         try (Writer writer = new OutputStreamWriter(servletResponse.getOutputStream())) {
-            StatefulBeanToCsv<Product> beanToCsv = new StatefulBeanToCsvBuilder<Product>(writer).withSeparator(';').build();
+            StatefulBeanToCsv<ProductCsv> beanToCsv = new StatefulBeanToCsvBuilder<ProductCsv>(writer).withSeparator(';').build();
             servletResponse.setContentType("text/csv");
             servletResponse.addHeader("Content-Disposition", "attachment; filename=" + "products.csv");
-            beanToCsv.write(products);
+            beanToCsv.write(products.stream().map(productConverter::convertToCsv).toList());
         }
     }
 }
