@@ -42,7 +42,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void create(Order order) throws DBConnectionException, UserAlreadyExistsException {
+    public void create(Order order) throws DBConnectionException {
         orderRepository.create(order);
     }
 
@@ -62,7 +62,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public ModelAndView createUserOrder(User user, Cart cart, String address) throws DBConnectionException, UserAlreadyExistsException, NoOrderAddressException {
+    public ModelAndView createUserOrder(User user, Cart cart, String address) throws DBConnectionException, NoOrderAddressException {
         if (address.isBlank()) {
             throw new NoOrderAddressException("Введите адрес для заказа!");
         }

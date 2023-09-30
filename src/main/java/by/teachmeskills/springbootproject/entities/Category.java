@@ -1,5 +1,6 @@
 package by.teachmeskills.springbootproject.entities;
 
+import com.opencsv.bean.CsvBindByName;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,6 +28,7 @@ import java.util.List;
 public class Category extends BaseEntity {
     @Column(name = "name")
     @Size(min = 1, max = 60, message = "Пустое или длиннее 60 символов")
+    @CsvBindByName
     private String name;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "category")
     @EqualsAndHashCode.Exclude

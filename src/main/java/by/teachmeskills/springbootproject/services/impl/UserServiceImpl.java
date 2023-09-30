@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void create(User user) throws DBConnectionException, UserAlreadyExistsException {
+    public void create(User user) throws DBConnectionException {
         userRepository.create(user);
     }
 
@@ -50,13 +50,8 @@ public class UserServiceImpl implements UserService {
     public ModelAndView registerUser(User user, String repPassword) throws DBConnectionException {
         ModelMap modelMap = new ModelMap();
         if (repPassword.equals(user.getPassword())) {
-            try {
-                userRepository.create(user);
-                modelMap.addAttribute("categories", categoryService.read());
-            } catch (UserAlreadyExistsException e) {
-                modelMap.addAttribute("state", "Пользователь с такой почтой уже существует");
-                return new ModelAndView(PagesPathEnum.REGISTER_PAGE.getPath(), modelMap);
-            }
+            userRepository.create(user);
+            modelMap.addAttribute("categories", categoryService.read());
         }
         return new ModelAndView(PagesPathEnum.HOME_PAGE.getPath(), modelMap);
     }

@@ -4,7 +4,9 @@ import by.teachmeskills.springbootproject.entities.Category;
 import by.teachmeskills.springbootproject.exceptions.DBConnectionException;
 import by.teachmeskills.springbootproject.repositories.CategoryRepository;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.PersistenceException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -24,8 +26,13 @@ public class CategoryRepositoryImpl implements CategoryRepository {
 
 
     @Override
-    public void create(Category category) throws DBConnectionException {
+    public void create(Category category) {
         entityManager.persist(category);
+    }
+
+    @Override
+    public void update(Category category) {
+        entityManager.merge(category);
     }
 
     @Override
@@ -42,5 +49,10 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     @Override
     public Category findById(int id) throws DBConnectionException {
         return entityManager.find(Category.class, id);
+    }
+
+    @Override
+    public Category findByName(String name) {
+        return (Category) entityManager.createQuery("select c from Category c where c.name =:name").setParameter("name", name).getSingleResult();
     }
 }

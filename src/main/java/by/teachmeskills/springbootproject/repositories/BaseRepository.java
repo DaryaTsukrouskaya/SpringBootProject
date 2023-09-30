@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface BaseRepository<T extends BaseEntity> {
 
-    void create(T entity) throws DBConnectionException, UserAlreadyExistsException;
+    void create(T entity) throws DBConnectionException;
 
     void delete(int id) throws DBConnectionException;
 

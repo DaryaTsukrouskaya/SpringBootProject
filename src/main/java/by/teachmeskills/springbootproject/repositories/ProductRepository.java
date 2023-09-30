@@ -15,4 +15,6 @@ public interface ProductRepository extends BaseRepository<Product> {
 
     Long findProductsQuantityByKeywords(String words) throws DBConnectionException;
 
+    void update(Product product);
+
 }
