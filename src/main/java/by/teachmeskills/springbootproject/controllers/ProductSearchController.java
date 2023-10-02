@@ -31,25 +31,6 @@ public class ProductSearchController {
         return new ModelAndView(PagesPathEnum.SEARCH_PAGE.getPath());
     }
 
-    @PostMapping
-    public ModelAndView searchResult(@ModelAttribute("keyWords") KeyWords keyWords) throws DBConnectionException {
-        return productService.searchProductsPaged(keyWords.getCurrentPageNumber(), keyWords.getKeyWords());
-    }
-
-    @GetMapping("/{pageNumber}")
-    public ModelAndView certainSearchPage(@PathVariable int pageNumber, @SessionAttribute("keyWords") KeyWords keyWords) throws DBConnectionException {
-        keyWords.setCurrentPageNumber(pageNumber);
-        if (keyWords.getCurrentPageNumber() > 3) {
-            keyWords.setCurrentPageNumber(keyWords.getCurrentPageNumber() - 1);
-            pageNumber -= 1;
-        }
-        if (keyWords.getCurrentPageNumber() < 1) {
-            keyWords.setCurrentPageNumber(keyWords.getCurrentPageNumber() + 1);
-            pageNumber += 1;
-        }
-        return productService.searchProductsPaged(pageNumber, keyWords.getKeyWords());
-    }
-
     @ModelAttribute("keyWords")
     public KeyWords setShoppingCart() {
         return new KeyWords();

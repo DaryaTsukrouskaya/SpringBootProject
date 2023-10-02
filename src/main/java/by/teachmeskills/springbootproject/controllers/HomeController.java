@@ -28,17 +28,17 @@ public class HomeController {
     }
 
     @GetMapping
-    public ModelAndView getHomePage() throws DBConnectionException {
+    public ModelAndView getHomePage() {
         return categoryService.getCategoriesData();
     }
 
     @PostMapping("/loadCsvFile")
-    public void loadToFile(HttpServletResponse servletResponse) throws CsvRequiredFieldEmptyException, CsvDataTypeMismatchException, DBConnectionException, IOException {
+    public void loadToFile(HttpServletResponse servletResponse) throws CsvRequiredFieldEmptyException, CsvDataTypeMismatchException, IOException {
         categoryService.saveCategoriesToFile(servletResponse);
     }
 
     @PostMapping("/loadFromFile")
-    public ModelAndView loadFromFile(@RequestParam("file") MultipartFile file) throws DBConnectionException {
+    public ModelAndView loadFromFile(@RequestParam("file") MultipartFile file) {
         return categoryService.saveCategoriesFromFile(file);
     }
 }

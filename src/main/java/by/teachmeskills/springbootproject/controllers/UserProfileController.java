@@ -1,7 +1,6 @@
 package by.teachmeskills.springbootproject.controllers;
 
 import by.teachmeskills.springbootproject.entities.User;
-import by.teachmeskills.springbootproject.exceptions.DBConnectionException;
 import by.teachmeskills.springbootproject.services.UserService;
 import by.teachmeskills.springbootproject.services.impl.UserServiceImpl;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +21,7 @@ public class UserProfileController {
 
 
     @GetMapping
-    public ModelAndView getUserPage(@SessionAttribute("user") User user) throws DBConnectionException {
+    public ModelAndView getUserPage(@SessionAttribute("user") User user) {
         return userService.userServicePage(user);
     }
 }

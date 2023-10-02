@@ -3,9 +3,7 @@ package by.teachmeskills.springbootproject.controllers;
 import by.teachmeskills.springbootproject.entities.Cart;
 import by.teachmeskills.springbootproject.entities.User;
 import by.teachmeskills.springbootproject.enums.PagesPathEnum;
-import by.teachmeskills.springbootproject.exceptions.DBConnectionException;
 import by.teachmeskills.springbootproject.exceptions.NoOrderAddressException;
-import by.teachmeskills.springbootproject.exceptions.UserAlreadyExistsException;
 import by.teachmeskills.springbootproject.services.OrderService;
 import by.teachmeskills.springbootproject.services.ProductService;
 import by.teachmeskills.springbootproject.services.UserService;
@@ -50,7 +48,7 @@ public class CartController {
     }
 
     @GetMapping("/add")
-    public ModelAndView addProduct(@RequestParam("product_id") int id, @ModelAttribute("cart") Cart cart) throws DBConnectionException {
+    public ModelAndView addProduct(@RequestParam("product_id") int id, @ModelAttribute("cart") Cart cart) {
         return productService.addProductToCart(id, cart);
 
     }
@@ -71,7 +69,7 @@ public class CartController {
     }
 
     @PostMapping("/createOrder")
-    public ModelAndView buy(@ModelAttribute("cart") Cart cart, @SessionAttribute("user") User user, @RequestParam("address") String address) throws DBConnectionException, UserAlreadyExistsException, NoOrderAddressException {
+    public ModelAndView buy(@ModelAttribute("cart") Cart cart, @SessionAttribute("user") User user, @RequestParam("address") String address) throws NoOrderAddressException {
         return orderService.createUserOrder(user, cart, address);
     }
 

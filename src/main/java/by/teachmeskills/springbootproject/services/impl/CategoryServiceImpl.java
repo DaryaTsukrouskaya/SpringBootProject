@@ -2,12 +2,8 @@ package by.teachmeskills.springbootproject.services.impl;
 
 
 import by.teachmeskills.springbootproject.entities.Category;
-import by.teachmeskills.springbootproject.entities.Product;
 import by.teachmeskills.springbootproject.enums.PagesPathEnum;
-import by.teachmeskills.springbootproject.exceptions.DBConnectionException;
-import by.teachmeskills.springbootproject.exceptions.UserAlreadyExistsException;
 import by.teachmeskills.springbootproject.repositories.CategoryRepository;
-import by.teachmeskills.springbootproject.repositories.impl.CategoryRepositoryImpl;
 import by.teachmeskills.springbootproject.services.CategoryService;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
@@ -29,7 +25,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -40,47 +35,46 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
 
     @Autowired
-    public CategoryServiceImpl(CategoryRepositoryImpl categoryRepository) {
+    public CategoryServiceImpl(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
 
-
     @Override
-    public List<Category> read() throws DBConnectionException {
-        return categoryRepository.read();
+    public List<Category> read() {
+        return categoryRepository.findAll();
     }
 
     @Override
-    public void create(Category category) throws DBConnectionException {
-        categoryRepository.create(category);
+    public void create(Category category) {
+        categoryRepository.save(category);
     }
 
     @Override
-    public void delete(int id) throws DBConnectionException {
-        categoryRepository.delete(id);
+    public void delete(int id) {
+        categoryRepository.deleteById(id);
     }
 
 
-    public Category findById(int id) throws DBConnectionException {
+    public Category findById(int id) {
         return categoryRepository.findById(id);
     }
 
-    public ModelAndView getCategoriesData() throws DBConnectionException {
+    public ModelAndView getCategoriesData() {
         ModelMap modelMap = new ModelMap();
-        modelMap.addAttribute("categories", categoryRepository.read());
+        modelMap.addAttribute("categories", categoryRepository.findAll());
         return new ModelAndView(PagesPathEnum.HOME_PAGE.getPath(), modelMap);
 
     }
 
     @Override
-    public ModelAndView saveCategoriesFromFile(MultipartFile file) throws DBConnectionException {
+    public ModelAndView saveCategoriesFromFile(MultipartFile file) {
         List<Category> csvCategories = parseCsv(file);
         ModelMap modelMap = new ModelMap();
         if (Optional.ofNullable(csvCategories).isPresent()) {
             for (Category csvCategory : csvCategories) {
-                categoryRepository.create(csvCategory);
+                categoryRepository.save(csvCategory);
             }
-            modelMap.addAttribute("categories", categoryRepository.read());
+            modelMap.addAttribute("categories", categoryRepository.findAll());
         }
         return new ModelAndView(PagesPathEnum.HOME_PAGE.getPath(), modelMap);
     }
@@ -101,8 +95,8 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void saveCategoriesToFile(HttpServletResponse servletResponse) throws CsvRequiredFieldEmptyException, CsvDataTypeMismatchException, DBConnectionException, IOException {
-        List<Category> categories = categoryRepository.read();
+    public void saveCategoriesToFile(HttpServletResponse servletResponse) throws CsvRequiredFieldEmptyException, CsvDataTypeMismatchException, IOException {
+        List<Category> categories = categoryRepository.findAll();
         try (Writer writer = new OutputStreamWriter(servletResponse.getOutputStream())) {
             StatefulBeanToCsv<Category> statefulBeanToCsv = new StatefulBeanToCsvBuilder<Category>(writer).withSeparator(';').build();
             servletResponse.setContentType("text/csv");

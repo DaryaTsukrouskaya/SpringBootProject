@@ -1,15 +1,13 @@
 package by.teachmeskills.springbootproject.repositories;
+
 import by.teachmeskills.springbootproject.entities.User;
 import by.teachmeskills.springbootproject.exceptions.DBConnectionException;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 
-public interface UserRepository extends BaseRepository<User> {
-    User findById(int id) throws DBConnectionException;
+public interface UserRepository extends JpaRepository<User, Integer> {
 
-    User findByEmailAndPassword(String email, String password) throws DBConnectionException;
+    User findByEmailAndPassword(String email, String password);
 
-    void updatePassword(String password, String email) throws DBConnectionException;
-
-    void updateEmail(String previousEmail, String newEmail) throws DBConnectionException;
-    void update(User user);
+    User findById(int id);
 }

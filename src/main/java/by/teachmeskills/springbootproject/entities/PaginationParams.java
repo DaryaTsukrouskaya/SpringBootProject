@@ -1,19 +1,19 @@
 package by.teachmeskills.springbootproject.entities;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @Data
 @SuperBuilder
 @AllArgsConstructor
-public class KeyWords {
-    private String keyWords;
-    private int currentPageNumber;
+public class PaginationParams {
+    private int pageNumber;
+    private int pageSize;
 
-    public KeyWords() {
-        this.currentPageNumber = 0;
+    public PaginationParams() {
+        this.pageNumber = 0;
+        this.pageSize = 1;
     }
-
 }

@@ -3,11 +3,10 @@ package by.teachmeskills.springbootproject.repositories;
 
 import by.teachmeskills.springbootproject.entities.Order;
 import by.teachmeskills.springbootproject.exceptions.DBConnectionException;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface OrderRepository extends BaseRepository<Order> {
-    Order findById(int id) throws DBConnectionException;
-
-    List<Order> findByUserId(int id) throws DBConnectionException;
+public interface OrderRepository extends JpaRepository<Order, Integer> {
+    List<Order> findByUserId(int id);
 }

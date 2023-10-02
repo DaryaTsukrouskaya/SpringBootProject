@@ -2,19 +2,17 @@ package by.teachmeskills.springbootproject.repositories;
 
 
 import by.teachmeskills.springbootproject.entities.Product;
-import by.teachmeskills.springbootproject.exceptions.DBConnectionException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface ProductRepository extends BaseRepository<Product> {
-    Product findById(int id) throws DBConnectionException;
+public interface ProductRepository extends JpaRepository<Product, Integer> {
 
-    List<Product> getProductsByCategory(int id) throws DBConnectionException;
+    List<Product> findByCategoryId(int id);
 
-    List<Product> findProductsByKeywords(String words, int pageNumber, int maxResult) throws DBConnectionException;
+    Page<Product> findByCategoryId(int id, Pageable page);
 
-    Long findProductsQuantityByKeywords(String words) throws DBConnectionException;
-
-    void update(Product product);
-
+    Product findById(int id);
 }

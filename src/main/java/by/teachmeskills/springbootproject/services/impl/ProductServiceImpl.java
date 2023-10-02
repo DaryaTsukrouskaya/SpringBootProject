@@ -8,7 +8,6 @@ import by.teachmeskills.springbootproject.entities.Product;
 import by.teachmeskills.springbootproject.enums.PagesPathEnum;
 import by.teachmeskills.springbootproject.exceptions.DBConnectionException;
 import by.teachmeskills.springbootproject.repositories.ProductRepository;
-import by.teachmeskills.springbootproject.repositories.impl.ProductRepositoryImpl;
 import by.teachmeskills.springbootproject.services.CategoryService;
 import by.teachmeskills.springbootproject.services.ProductService;
 import com.opencsv.bean.CsvToBean;
@@ -20,6 +19,9 @@ import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.multipart.MultipartFile;
@@ -43,7 +45,7 @@ public class ProductServiceImpl implements ProductService {
     private final CategoryService categoryService;
 
     @Autowired
-    public ProductServiceImpl(ProductRepositoryImpl productRepository, ProductConverter productConverter, CategoryService categoryService) {
+    public ProductServiceImpl(ProductRepository productRepository, ProductConverter productConverter, CategoryService categoryService) {
         this.productRepository = productRepository;
         this.productConverter = productConverter;
         this.categoryService = categoryService;
@@ -51,36 +53,38 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public List<Product> read() throws DBConnectionException {
-        return productRepository.read();
+    public List<Product> read() {
+        return productRepository.findAll();
     }
 
     @Override
-    public void create(Product product) throws DBConnectionException {
-        productRepository.create(product);
+    public void create(Product product) {
+        productRepository.save(product);
 
     }
 
     @Override
-    public void delete(int id) throws DBConnectionException {
-        productRepository.delete(id);
+    public void delete(int id) {
+        productRepository.deleteById(id);
     }
 
     @Override
-    public Product findById(int id) throws DBConnectionException {
+    public Product findById(int id) {
         return productRepository.findById(id);
     }
 
     @Override
-    public ModelAndView getProductsByCategory(int id) throws DBConnectionException {
+    public ModelAndView getProductsByCategory(int id, int pageNumber, int pageSize) {
         ModelMap modelMap = new ModelMap();
+        Pageable pageable = PageRequest.of(pageNumber,pageSize, Sort.by("name").ascending());
         Category category = categoryService.findById(id);
+        category.setProducts(productRepository.findByCategoryId(id,pageable).getContent());
         modelMap.addAttribute("category", category);
         return new ModelAndView(PagesPathEnum.CATEGORY_PAGE.getPath(), modelMap);
     }
 
     @Override
-    public ModelAndView addProductToCart(int productId, Cart cart) throws DBConnectionException {
+    public ModelAndView addProductToCart(int productId, Cart cart) {
         ModelMap modelMap = new ModelMap();
         Product product = findById(productId);
         cart.addProduct(product);
@@ -112,7 +116,7 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public ModelAndView findProductByIdForProductPage(int id) throws DBConnectionException {
+    public ModelAndView findProductByIdForProductPage(int id) {
         ModelMap modelMap = new ModelMap();
         Product product = findById(id);
         modelMap.addAttribute("categoryName", product.getName());
@@ -121,36 +125,17 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ModelAndView searchProductsPaged(int pageNumber, String keyWords) throws DBConnectionException {
-        Long totalRecords;
-        List<Product> products;
-        int pageMaxResult;
-        ModelMap modelMap = new ModelMap();
-        if (keyWords != null) {
-            totalRecords = productRepository.findProductsQuantityByKeywords(keyWords);
-            pageMaxResult = (int) (totalRecords / 3);
-            products = productRepository.findProductsByKeywords(keyWords, pageNumber, pageMaxResult);
-            modelMap.addAttribute("products", products);
-        }
-        return new ModelAndView(PagesPathEnum.SEARCH_PAGE.getPath(), modelMap);
-    }
-
-    @Override
-    public ModelAndView saveProductsFromFile(MultipartFile file, int id) throws DBConnectionException {
+    public ModelAndView saveProductsFromFile(MultipartFile file, int id) {
         List<ProductCsv> csvProducts = parseCsv(file);
         ModelMap modelMap = new ModelMap();
         List<Product> products = csvProducts.stream().map(productConverter::convertFromCsv).toList();
-        products.stream().forEach(c -> {
-            try {
-                c.setCategory(categoryService.findById(id));
-            } catch (DBConnectionException e) {
-                throw new RuntimeException(e);
-            }
-        });
+        products.stream().forEach(c -> c.setCategory(categoryService.findById(id)));
         for (Product product : products) {
-            productRepository.create(product);
+            productRepository.save(product);
         }
+        Pageable pageable = PageRequest.of(0,0, Sort.by("name").ascending());
         Category category = categoryService.findById(id);
+        category.setProducts(productRepository.findByCategoryId(id,pageable).getContent());
         modelMap.addAttribute("category", category);
         return new ModelAndView(PagesPathEnum.CATEGORY_PAGE.getPath(), modelMap);
     }
@@ -171,8 +156,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void saveCategoryProductsToFile(HttpServletResponse servletResponse, int id) throws DBConnectionException, IOException, CsvRequiredFieldEmptyException, CsvDataTypeMismatchException {
-        List<Product> products = productRepository.getProductsByCategory(id);
+    public void saveCategoryProductsToFile(HttpServletResponse servletResponse, int id) throws IOException, CsvRequiredFieldEmptyException, CsvDataTypeMismatchException {
+        List<Product> products = productRepository.findByCategoryId(id);
         try (Writer writer = new OutputStreamWriter(servletResponse.getOutputStream())) {
             StatefulBeanToCsv<ProductCsv> beanToCsv = new StatefulBeanToCsvBuilder<ProductCsv>(writer).withSeparator(';').build();
             servletResponse.setContentType("text/csv");
