@@ -4,6 +4,7 @@ import by.teachmeskills.springbootproject.converters.ProductConverter;
 import by.teachmeskills.springbootproject.csv.ProductCsv;
 import by.teachmeskills.springbootproject.entities.Cart;
 import by.teachmeskills.springbootproject.entities.Category;
+import by.teachmeskills.springbootproject.entities.PaginationParams;
 import by.teachmeskills.springbootproject.entities.Product;
 import by.teachmeskills.springbootproject.enums.PagesPathEnum;
 import by.teachmeskills.springbootproject.exceptions.DBConnectionException;
@@ -74,11 +75,19 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ModelAndView getProductsByCategory(int id, int pageNumber, int pageSize) {
+    public ModelAndView getProductsByCategory(int id, PaginationParams params) {
+        if (params.getPageNumber() < 0) {
+            params.setPageNumber(0);
+        }
         ModelMap modelMap = new ModelMap();
-        Pageable pageable = PageRequest.of(pageNumber,pageSize, Sort.by("name").ascending());
         Category category = categoryService.findById(id);
-        category.setProducts(productRepository.findByCategoryId(id,pageable).getContent());
+        Pageable pageable = PageRequest.of(params.getPageNumber(), params.getPageSize(), Sort.by("name").ascending());
+        category.setProducts(productRepository.findByCategoryId(id, pageable).getContent());
+        if (category.getProducts().isEmpty()) {
+            params.setPageNumber(params.getPageNumber() - 1);
+            pageable = PageRequest.of(params.getPageNumber(), params.getPageSize(), Sort.by("name").ascending());
+            category.setProducts(productRepository.findByCategoryId(id, pageable).getContent());
+        }
         modelMap.addAttribute("category", category);
         return new ModelAndView(PagesPathEnum.CATEGORY_PAGE.getPath(), modelMap);
     }
@@ -133,9 +142,9 @@ public class ProductServiceImpl implements ProductService {
         for (Product product : products) {
             productRepository.save(product);
         }
-        Pageable pageable = PageRequest.of(0,0, Sort.by("name").ascending());
+        Pageable pageable = PageRequest.of(0, 0, Sort.by("name").ascending());
         Category category = categoryService.findById(id);
-        category.setProducts(productRepository.findByCategoryId(id,pageable).getContent());
+        category.setProducts(productRepository.findByCategoryId(id, pageable).getContent());
         modelMap.addAttribute("category", category);
         return new ModelAndView(PagesPathEnum.CATEGORY_PAGE.getPath(), modelMap);
     }

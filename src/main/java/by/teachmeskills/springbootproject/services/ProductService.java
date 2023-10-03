@@ -2,6 +2,7 @@ package by.teachmeskills.springbootproject.services;
 
 
 import by.teachmeskills.springbootproject.entities.Cart;
+import by.teachmeskills.springbootproject.entities.PaginationParams;
 import by.teachmeskills.springbootproject.entities.Product;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
@@ -14,7 +15,7 @@ import java.io.IOException;
 public interface ProductService extends BaseService<Product> {
     Product findById(int id);
 
-    ModelAndView getProductsByCategory(int id, int pageNumber, int pageSize);
+    ModelAndView getProductsByCategory(int id, PaginationParams params);
 
     ModelAndView addProductToCart(int id, Cart cart);
 

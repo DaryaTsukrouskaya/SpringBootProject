@@ -83,18 +83,18 @@
 <nav>
     <ul class="pagination">
         <li class="page-item"><a class="page-link"
-                                 href="/category/${category.getId()}/${paginationParams.setPageNumber((paginationParams.getPageNumber())-1)}">Назад</a>
+                                 href="/category/pagination/${category.getId()}/${paginationParams.getPageNumber()-1}">Назад</a>
         </li>
         <li class="page-item"><a class="page-link"
-                                 href="/category/${category.getId()}/${paginationParams.setPageNumber(0)}">1</a>
+                                 href="/category/pagination/${category.getId()}/0">1</a>
         </li>
         <li class="page-item"><a class="page-link"
-                                 href="/category/${category.getId()}/${paginationParams.setPageNumber(1)}">2</a>
+                                 href="/category/pagination/${category.getId()}/1">2</a>
         </li>
         <li class="page-item"><a class="page-link"
-                                 href=${category.getId()}/${paginationParams.setPageNumber(2)}">3</a></li>
+                                 href="/category/pagination/${category.getId()}/2">3</a></li>
         <li class="page-item"><a class="page-link"
-                                 href="/category/${category.getId()}/${paginationParams.setPageNumber(paginationParams.getPageNumber()+1)}">Вперед</a>
+                                 href="/category/pagination/${category.getId()}/${paginationParams.getPageNumber()+1}">Вперед</a>
         </li>
     </ul>
 </nav>
