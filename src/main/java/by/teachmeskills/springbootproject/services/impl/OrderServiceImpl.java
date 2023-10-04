@@ -75,6 +75,6 @@ public class OrderServiceImpl implements OrderService {
         userService.update(user);
         ModelMap modelMap = new ModelMap();
         modelMap.addAttribute("categories", categoryService.read());
-        return new ModelAndView(PagesPathEnum.HOME_PAGE.getPath());
+        return new ModelAndView(PagesPathEnum.HOME_PAGE.getPath(), modelMap);
     }
 }

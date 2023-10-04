@@ -83,6 +83,19 @@
         </div>
     </div>
 </section>
+<div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false" style="margin: 15px">
+        Размер страницы
+    </button>
+    <div class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenu">
+        <a class="dropdown-item" href="/profile/changeSize/1">1</a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="/profile/changeSize/2">2</a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="/profile/changeSize/3">3</a>
+    </div>
+</div>
 <section>
     <h5 class="mb-0" style="padding: 20px">История заказов</h5>
     <c:forEach items="${userOrders}" var="order">
@@ -111,6 +124,24 @@
         </a>
         </div>
     </c:forEach>
+    <nav>
+        <ul class="pagination justify-content-center" style="margin: 15px;  color: black">
+            <li class="page-item"><a class="page-link"
+                                     href="/profile/pagination/${paginationParams.getPageNumber()-1}">Назад</a>
+            </li>
+            <li class="page-item"><a class="page-link"
+                                     href="/profile/pagination/0">1</a>
+            </li>
+            <li class="page-item"><a class="page-link"
+                                     href="/profile/pagination/1">2</a>
+            </li>
+            <li class="page-item"><a class="page-link"
+                                     href="/profile/pagination/2">3</a></li>
+            <li class="page-item"><a class="page-link"
+                                     href="/profile/pagination/${paginationParams.getPageNumber()+1}">Вперед</a>
+            </li>
+        </ul>
+    </nav>
 </section>
 </body>
 </html>

@@ -1,8 +1,8 @@
 package by.teachmeskills.springbootproject.services;
 
 import by.teachmeskills.springbootproject.entities.Cart;
+import by.teachmeskills.springbootproject.entities.PaginationParams;
 import by.teachmeskills.springbootproject.entities.User;
-import by.teachmeskills.springbootproject.exceptions.DBConnectionException;
 import org.springframework.web.servlet.ModelAndView;
 
 public interface UserService extends BaseService<User> {
@@ -12,7 +12,7 @@ public interface UserService extends BaseService<User> {
 
     ModelAndView authenticate(String email, String password);
 
-    ModelAndView userServicePage(User user);
+    ModelAndView userServicePage(User user, PaginationParams paginationParams);
 
     ModelAndView checkout(Cart cart);
 

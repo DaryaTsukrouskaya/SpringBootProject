@@ -35,25 +35,29 @@ public class CategoryController {
     @GetMapping("/{id}")
     public ModelAndView getCategoryProductsPage(@PathVariable int id, @ModelAttribute("paginationParams") PaginationParams pagination) {
         pagination.setPageNumber(0);
-        pagination.setPageSize(1);
-        ModelAndView modelAndView = productService.getProductsByCategory(id, pagination);
-        return modelAndView;
+        pagination.setPageSize(2);
+        return productService.getProductsByCategory(id, pagination);
     }
 
     @GetMapping("/pagination/{id}/{pageNumber}")
     public ModelAndView getCategoryProductsPaginated(@PathVariable int id, @PathVariable int pageNumber, @SessionAttribute("paginationParams") PaginationParams params) {
         params.setPageNumber(pageNumber);
-        ModelAndView modelAndView = productService.getProductsByCategory(id, params);
-        return modelAndView;
+        return productService.getProductsByCategory(id, params);
+    }
+
+    @GetMapping("/changeSize/{id}/{size}")
+    public ModelAndView changeCategoryPageSize(@PathVariable int id, @PathVariable int size, @SessionAttribute("paginationParams") PaginationParams paginationParams) {
+        paginationParams.setPageSize(size);
+        return productService.getProductsByCategory(id, paginationParams);
     }
 
     @PostMapping("/loadCsvFile/{id}")
-    public void loadToFile(HttpServletResponse servletResponse, @PathVariable int id) throws CsvRequiredFieldEmptyException, CsvDataTypeMismatchException, DBConnectionException, IOException {
+    public void loadToFile(HttpServletResponse servletResponse, @PathVariable int id) throws CsvRequiredFieldEmptyException, CsvDataTypeMismatchException, IOException {
         productService.saveCategoryProductsToFile(servletResponse, id);
     }
 
     @PostMapping("/loadFromFile/{id}")
-    public ModelAndView loadFromFile(@RequestParam("file") MultipartFile file, @PathVariable int id) throws DBConnectionException {
+    public ModelAndView loadFromFile(@RequestParam("file") MultipartFile file, @PathVariable int id){
         return productService.saveProductsFromFile(file, id);
     }
 

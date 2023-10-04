@@ -1,14 +1,21 @@
 package by.teachmeskills.springbootproject.services.impl;
 
 import by.teachmeskills.springbootproject.entities.Cart;
+import by.teachmeskills.springbootproject.entities.Order;
+import by.teachmeskills.springbootproject.entities.PaginationParams;
 import by.teachmeskills.springbootproject.entities.User;
 import by.teachmeskills.springbootproject.enums.PagesPathEnum;
 import by.teachmeskills.springbootproject.exceptions.DBConnectionException;
+import by.teachmeskills.springbootproject.repositories.OrderRepository;
 import by.teachmeskills.springbootproject.repositories.UserRepository;
 import by.teachmeskills.springbootproject.services.CategoryService;
 import by.teachmeskills.springbootproject.services.ProductService;
 import by.teachmeskills.springbootproject.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
@@ -21,12 +28,15 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final CategoryService categoryService;
     private final ProductService productService;
+    private final OrderRepository orderRepository;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, CategoryServiceImpl categoryRepository, ProductServiceImpl productService) {
+    public UserServiceImpl(UserRepository userRepository, CategoryServiceImpl categoryRepository, ProductServiceImpl productService,
+                           OrderRepository orderRepository) {
         this.userRepository = userRepository;
         this.categoryService = categoryRepository;
         this.productService = productService;
+        this.orderRepository = orderRepository;
     }
 
     @Override
@@ -81,10 +91,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ModelAndView userServicePage(User user) {
+    public ModelAndView userServicePage(User user, PaginationParams paginationParams) {
+        if (paginationParams.getPageNumber() < 0) {
+            paginationParams.setPageNumber(0);
+        }
         ModelMap modelMap = new ModelMap();
+        Pageable pageable = PageRequest.of(paginationParams.getPageNumber(), paginationParams.getPageSize(), Sort.by("orderDate").descending());
+        List<Order> orders = orderRepository.findByUserId(user.getId(), pageable).getContent();
+        if (orders.isEmpty()) {
+            paginationParams.setPageNumber(paginationParams.getPageNumber() - 1);
+            pageable = PageRequest.of(paginationParams.getPageNumber(), paginationParams.getPageSize(), Sort.by("orderDate").descending());
+            orders = orderRepository.findByUserId(user.getId(), pageable).getContent();
+
+        }
         modelMap.addAttribute("user", user);
-        modelMap.addAttribute("userOrders", user.getOrders());
+        modelMap.addAttribute("userOrders", orders);
         return new ModelAndView(PagesPathEnum.USER_PROFILE_PAGE.getPath(), modelMap);
     }
 

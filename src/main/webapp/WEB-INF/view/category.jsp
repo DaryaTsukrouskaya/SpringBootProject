@@ -47,7 +47,19 @@
         </div>
     </nav>
 </header>
-
+<div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false" style="margin: 15px">
+        Размер страницы
+    </button>
+    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu">
+        <a class="dropdown-item" href="/category/changeSize/${category.getId()}/1">1</a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="/category/changeSize/${category.getId()}/2">2</a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="/category/changeSize/${category.getId()}/3">3</a>
+    </div>
+</div>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <div class="row">
     <c:forEach items="${category.getProducts()}" var="product">
@@ -67,21 +79,8 @@
         </div>
     </c:forEach>
 </div>
-<form method="POST" action="/category/loadFromFile/${category.getId()}" enctype="multipart/form-data"
-      class="file-import">
-    <label for="file-upload" class="custom-file-upload"
-           style="padding: 15px;margin: 0px 0px 15px 15px;border: 1px solid #ccc">
-        <input id="file-upload" name="file" type="file" class="title" accept=".csv">
-        <button type="submit" class="btn btn-dark">Импортировать продукты категории</button>
-    </label>
-</form>
-<form method="POST" action="/category/loadCsvFile/${category.getId()}">
-    <button type="submit" class="btn btn-dark" style="margin: 15px">Экспортировать продукты категории</button>
-</form>
-<br>
-<br>
 <nav>
-    <ul class="pagination">
+    <ul class="pagination justify-content-center" style="margin: 15px;  color: black">
         <li class="page-item"><a class="page-link"
                                  href="/category/pagination/${category.getId()}/${paginationParams.getPageNumber()-1}">Назад</a>
         </li>
@@ -98,5 +97,18 @@
         </li>
     </ul>
 </nav>
+<br>
+<br>
+<form method="POST" action="/category/loadFromFile/${category.getId()}" enctype="multipart/form-data"
+      class="file-import">
+    <label for="file-upload" class="custom-file-upload"
+           style="padding: 15px;margin: 0px 0px 15px 15px;border: 1px solid #ccc">
+        <input id="file-upload" name="file" type="file" class="title" accept=".csv">
+        <button type="submit" class="btn btn-dark">Импортировать продукты категории</button>
+    </label>
+</form>
+<form method="POST" action="/category/loadCsvFile/${category.getId()}">
+    <button type="submit" class="btn btn-dark" style="margin: 15px">Экспортировать продукты категории</button>
+</form>
 </body>
 </html>
