@@ -35,7 +35,7 @@ public class ProductSearchSpecification implements Specification<Product> {
         if (Optional.ofNullable(searchParams.getPriceFrom()).isPresent()) {
             predicate.add(criteriaBuilder.lessThanOrEqualTo(root.get("price"), searchParams.getPriceTo()));
         }
-        if (Optional.of(searchParams.getCategoryName()).isPresent() && !searchParams.getCategoryName().isBlank()) {
+        if (Optional.ofNullable(searchParams.getCategoryName()).isPresent() && !searchParams.getCategoryName().isBlank()) {
             Join<Product, Category> productCategoryJoin = root.join("category");
             predicate.add(criteriaBuilder.and(criteriaBuilder.like(productCategoryJoin.get("category"), "%" + searchParams.getCategoryName() + "%")));
         }
