@@ -5,15 +5,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.math.BigDecimal;
+
 @Data
 @SuperBuilder
 @AllArgsConstructor
-public class KeyWords {
+@NoArgsConstructor
+public class SearchParams {
     private String keyWords;
-    private int currentPageNumber;
+    private BigDecimal priceFrom;
+    private BigDecimal priceTo;
+    private String categoryName;
 
-    public KeyWords() {
-        this.currentPageNumber = 0;
-    }
 
 }

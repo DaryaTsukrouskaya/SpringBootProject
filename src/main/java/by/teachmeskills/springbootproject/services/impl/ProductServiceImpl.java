@@ -6,9 +6,11 @@ import by.teachmeskills.springbootproject.entities.Cart;
 import by.teachmeskills.springbootproject.entities.Category;
 import by.teachmeskills.springbootproject.entities.PaginationParams;
 import by.teachmeskills.springbootproject.entities.Product;
+import by.teachmeskills.springbootproject.entities.SearchParams;
 import by.teachmeskills.springbootproject.enums.PagesPathEnum;
 import by.teachmeskills.springbootproject.exceptions.DBConnectionException;
 import by.teachmeskills.springbootproject.repositories.ProductRepository;
+import by.teachmeskills.springbootproject.repositories.ProductSearchSpecification;
 import by.teachmeskills.springbootproject.services.CategoryService;
 import by.teachmeskills.springbootproject.services.ProductService;
 import com.opencsv.bean.CsvToBean;
@@ -173,5 +175,14 @@ public class ProductServiceImpl implements ProductService {
             servletResponse.addHeader("Content-Disposition", "attachment; filename=" + "products.csv");
             beanToCsv.write(products.stream().map(productConverter::convertToCsv).toList());
         }
+    }
+
+    @Override
+    public ModelAndView searchProducts(SearchParams searchParams, PaginationParams paginationParams) {
+        ProductSearchSpecification specification = new ProductSearchSpecification(searchParams);
+        Pageable pageable = PageRequest.of(paginationParams.getPageNumber(), paginationParams.getPageSize(), Sort.by("name").ascending());
+        ModelMap modelMap = new ModelMap();
+        modelMap.addAttribute("products", productRepository.findAll(specification, pageable).getContent());
+        return new ModelAndView(PagesPathEnum.SEARCH_PAGE.getPath(), modelMap);
     }
 }
