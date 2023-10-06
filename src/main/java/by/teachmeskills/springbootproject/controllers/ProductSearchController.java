@@ -17,7 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @RestController
 @RequestMapping("/search")
-@SessionAttributes({"searchParams"})
+@SessionAttributes({"searchParams", "paginationParams"})
 public class ProductSearchController {
     private final ProductService productService;
 
@@ -32,7 +32,7 @@ public class ProductSearchController {
     }
 
     @PostMapping
-    public ModelAndView searchByNameOrDescription(@ModelAttribute("searchParams") SearchParams searchParams, @SessionAttribute("paginationParams") PaginationParams paginationParams) {
+    public ModelAndView searchByNameOrDescription(@ModelAttribute("searchParams") SearchParams searchParams,@ModelAttribute("paginationParams")PaginationParams paginationParams) {
         paginationParams.setPageNumber(0);
         return productService.searchProducts(searchParams, paginationParams);
     }
@@ -52,5 +52,10 @@ public class ProductSearchController {
     @ModelAttribute("searchParams")
     public SearchParams setSearchParams() {
         return new SearchParams();
+    }
+
+    @ModelAttribute("paginationParams")
+    public PaginationParams setPaginationParams() {
+        return new PaginationParams();
     }
 }

@@ -8,7 +8,6 @@ import by.teachmeskills.springbootproject.entities.PaginationParams;
 import by.teachmeskills.springbootproject.entities.Product;
 import by.teachmeskills.springbootproject.entities.SearchParams;
 import by.teachmeskills.springbootproject.enums.PagesPathEnum;
-import by.teachmeskills.springbootproject.exceptions.DBConnectionException;
 import by.teachmeskills.springbootproject.repositories.ProductRepository;
 import by.teachmeskills.springbootproject.repositories.ProductSearchSpecification;
 import by.teachmeskills.springbootproject.services.CategoryService;
@@ -179,10 +178,19 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ModelAndView searchProducts(SearchParams searchParams, PaginationParams paginationParams) {
+        if (paginationParams.getPageNumber() < 0) {
+            paginationParams.setPageNumber(0);
+        }
         ProductSearchSpecification specification = new ProductSearchSpecification(searchParams);
         Pageable pageable = PageRequest.of(paginationParams.getPageNumber(), paginationParams.getPageSize(), Sort.by("name").ascending());
         ModelMap modelMap = new ModelMap();
-        modelMap.addAttribute("products", productRepository.findAll(specification, pageable).getContent());
+        List<Product> products = productRepository.findAll(specification, pageable).getContent();
+        if (products.isEmpty()) {
+            paginationParams.setPageNumber(paginationParams.getPageNumber() - 1);
+            pageable = PageRequest.of(paginationParams.getPageNumber(), paginationParams.getPageSize(), Sort.by("name").ascending());
+            products = productRepository.findAll(specification, pageable).getContent();
+        }
+        modelMap.addAttribute("products", products);
         return new ModelAndView(PagesPathEnum.SEARCH_PAGE.getPath(), modelMap);
     }
 }
