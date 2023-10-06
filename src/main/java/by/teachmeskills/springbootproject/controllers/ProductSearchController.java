@@ -4,7 +4,6 @@ import by.teachmeskills.springbootproject.entities.PaginationParams;
 import by.teachmeskills.springbootproject.entities.SearchParams;
 import by.teachmeskills.springbootproject.enums.PagesPathEnum;
 import by.teachmeskills.springbootproject.services.ProductService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,7 +42,10 @@ public class ProductSearchController {
         paginationParams.setPageNumber(pageNumber);
         return productService.searchProducts(searchParams, paginationParams);
     }
-
+    @PostMapping("/applyFilter")
+    public ModelAndView applyFilter(@ModelAttribute("searchParams") SearchParams searchParams, @SessionAttribute("paginationParams") PaginationParams paginationParams) {
+        return productService.searchProducts(searchParams, paginationParams);
+    }
     @GetMapping("/setPageSize/{pageSize}")
     public ModelAndView changePageSize(@PathVariable int pageSize, @SessionAttribute("searchParams") SearchParams searchParams, @SessionAttribute("paginationParams") PaginationParams paginationParams) {
         paginationParams.setPageSize(pageSize);

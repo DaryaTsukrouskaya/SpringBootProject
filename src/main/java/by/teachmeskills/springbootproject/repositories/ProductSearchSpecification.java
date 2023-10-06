@@ -36,7 +36,7 @@ public class ProductSearchSpecification implements Specification<Product> {
         }
         if (Optional.ofNullable(searchParams.getCategoryName()).isPresent() && !searchParams.getCategoryName().isBlank()) {
             Join<Product, Category> productCategoryJoin = root.join("category");
-            predicate.add(criteriaBuilder.and(criteriaBuilder.like(productCategoryJoin.get("category"), "%" + searchParams.getCategoryName() + "%")));
+            predicate.add(criteriaBuilder.and(criteriaBuilder.like(productCategoryJoin.get("name"), "%" + searchParams.getCategoryName() + "%")));
         }
         return criteriaBuilder.and(predicate.toArray(new Predicate[0]));
     }

@@ -45,35 +45,57 @@
         </div>
     </nav>
 </header>
-<c:forEach items="${products}" var="product">
-    <div class="card mb-3" style="max-width: 540px;margin:10px;">
-        <div class="row g-0">
-            <div class="col-md-4">
-                <img src="${contextPath}/images/${product.getImagePath()}" class="img-fluid rounded-start"
-                     alt="Card image">
-            </div>
-            <div class="col-md-8">
-                <div class="card-body">
-                    <h5 class="card-title">${product.getName()}</h5>
-                    <p class="card-text">${product.getDescription()}</p>
-                    <p class="card-text">Цена: <fmt:formatNumber value="${product.getPrice()}" type="currency"/></p>
-                    <a href="/product/${product.getId()}"
-                       class="btn btn-dark btn-lg">Перейти</a>
+<div class="row">
+    <div class="col-lg-6 col-md-6">
+        <c:forEach items="${products}" var="product">
+            <div class="card mb-3" style="max-width: 540px;margin:10px;">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="${contextPath}/images/${product.getImagePath()}" class="img-fluid rounded-start"
+                             alt="Card image">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">${product.getName()}</h5>
+                            <p class="card-text">${product.getDescription()}</p>
+                            <p class="card-text">Цена: <fmt:formatNumber value="${product.getPrice()}"
+                                                                         type="currency"/></p>
+                            <a href="/product/${product.getId()}"
+                               class="btn btn-dark btn-lg">Перейти</a>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </c:forEach>
+        <nav>
+            <ul class="pagination" style="margin: 15px">
+                <li class="page-item"><a class="page-link"
+                                         href="/search/pagination/${paginationParams.getPageNumber()-1}">Назад</a></li>
+                <li class="page-item"><a class="page-link" href="/search/pagination/0">1</a></li>
+                <li class="page-item"><a class="page-link" href="/search/pagination/1">2</a></li>
+                <li class="page-item"><a class="page-link" href="/search/pagination/2">3</a></li>
+                <li class="page-item"><a class="page-link"
+                                         href="/search/pagination/${paginationParams.getPageNumber()+1}">Вперед</a>
+                </li>
+            </ul>
+        </nav>
     </div>
-</c:forEach>
-<nav>
-    <ul class="pagination">
-        <li class="page-item"><a class="page-link"
-                                 href="/search/pagination/${paginationParams.getPageNumber()-1}">Назад</a></li>
-        <li class="page-item"><a class="page-link" href="/search/pagination/0">1</a></li>
-        <li class="page-item"><a class="page-link" href="/search/pagination/1">2</a></li>
-        <li class="page-item"><a class="page-link" href="/search/pagination/2">3</a></li>
-        <li class="page-item"><a class="page-link" href="/search/pagination/${paginationParams.getPageNumber()+1}">Вперед</a>
-        </li>
-    </ul>
-</nav>
+    <div class="col-lg-6 col-md-6">
+        <label><h3>Фильтр</h3></label>
+        <form method="post" action="/search/applyFilter">
+            <select id="categoryName" name="categoryName">
+                <c:forEach items="${categories}" var="category">
+                    <option value="${category.getName()}">
+                            ${category.getName()}
+                    </option>
+                </c:forEach>
+            </select>
+            <div>Цена</div>
+            <input id="priceFrom" name="priceFrom" type="text" placeholder="Цена от">
+            <input id="priceTo" name="priceTo" type="text" placeholder="Цена до">
+            <button type="submit" class="btn btn-dark btn-lg">Применить</button>
+        </form>
+    </div>
+</div>
 </body>
 </html>

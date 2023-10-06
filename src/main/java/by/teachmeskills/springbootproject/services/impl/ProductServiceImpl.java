@@ -190,6 +190,7 @@ public class ProductServiceImpl implements ProductService {
             pageable = PageRequest.of(paginationParams.getPageNumber(), paginationParams.getPageSize(), Sort.by("name").ascending());
             products = productRepository.findAll(specification, pageable).getContent();
         }
+        modelMap.addAttribute("categories", categoryService.read());
         modelMap.addAttribute("products", products);
         return new ModelAndView(PagesPathEnum.SEARCH_PAGE.getPath(), modelMap);
     }

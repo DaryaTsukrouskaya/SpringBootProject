@@ -136,7 +136,7 @@
         </div>
     </c:forEach>
     <nav>
-        <ul class="pagination justify-content-center" style="margin: 15px;  color: black">
+        <ul class="pagination justify-content-center" style="margin: 15px">
             <li class="page-item"><a class="page-link"
                                      href="/profile/pagination/${paginationParams.getPageNumber()-1}">Назад</a>
             </li>
