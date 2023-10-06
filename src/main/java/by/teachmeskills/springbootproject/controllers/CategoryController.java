@@ -26,7 +26,6 @@ import java.io.IOException;
 public class CategoryController {
     private final ProductService productService;
 
-    @Autowired
     public CategoryController(ProductService productService) {
         this.productService = productService;
     }

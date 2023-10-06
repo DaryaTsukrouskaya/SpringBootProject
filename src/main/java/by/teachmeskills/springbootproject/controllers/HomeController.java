@@ -22,7 +22,6 @@ import java.io.IOException;
 public class HomeController {
     private final CategoryServiceImpl categoryService;
 
-    @Autowired
     public HomeController(CategoryServiceImpl categoryService) {
         this.categoryService = categoryService;
     }

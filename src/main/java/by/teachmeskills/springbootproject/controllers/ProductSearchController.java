@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -21,7 +22,6 @@ import org.springframework.web.servlet.ModelAndView;
 public class ProductSearchController {
     private final ProductService productService;
 
-    @Autowired
     public ProductSearchController(ProductService productService) {
         this.productService = productService;
     }
@@ -32,7 +32,8 @@ public class ProductSearchController {
     }
 
     @PostMapping
-    public ModelAndView searchByNameOrDescription(@ModelAttribute("searchParams") SearchParams searchParams,@ModelAttribute("paginationParams")PaginationParams paginationParams) {
+    public ModelAndView searchByNameOrDescription(@RequestParam("keyWords") String keyWords, @ModelAttribute("searchParams") SearchParams searchParams, @ModelAttribute("paginationParams") PaginationParams paginationParams) {
+        searchParams.setKeyWords(keyWords);
         paginationParams.setPageNumber(0);
         return productService.searchProducts(searchParams, paginationParams);
     }

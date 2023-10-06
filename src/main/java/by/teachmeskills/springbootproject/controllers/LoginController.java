@@ -24,7 +24,6 @@ import java.util.Objects;
 public class LoginController {
     private final UserService userService;
 
-    @Autowired
     public LoginController(UserServiceImpl userService) {
         this.userService = userService;
     }

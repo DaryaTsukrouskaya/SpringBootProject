@@ -19,7 +19,6 @@ import org.springframework.web.servlet.ModelAndView;
 public class RegisterController {
     private final UserService userService;
 
-    @Autowired
     public RegisterController(UserService userService) {
         this.userService = userService;
     }

@@ -33,7 +33,7 @@
             </div>
             <form method="post" action="/search">
                 <div class="input-group">
-                    <input type="search" id="searchParams" class="form-control" name="searchParams" placeholder="Поиск"
+                    <input type="search" id="keyWords" class="form-control" name="keyWords" placeholder="Поиск"
                            minlength="3"/>
                     <button type="submit" class="btn btn-primary">
                         <i class="fa fa-search"></i>

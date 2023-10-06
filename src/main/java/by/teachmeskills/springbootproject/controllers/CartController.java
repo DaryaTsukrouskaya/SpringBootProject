@@ -31,7 +31,6 @@ public class CartController {
     private final UserService userService;
     private final OrderService orderService;
 
-    @Autowired
     public CartController(ProductServiceImpl productService, UserServiceImpl userService, OrderServiceImpl orderService) {
         this.productService = productService;
         this.userService = userService;

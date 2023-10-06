@@ -14,7 +14,6 @@ import org.springframework.web.servlet.ModelAndView;
 public class ProductController {
     private final ProductService productService;
 
-    @Autowired
     public ProductController(ProductServiceImpl productService) {
         this.productService = productService;
     }

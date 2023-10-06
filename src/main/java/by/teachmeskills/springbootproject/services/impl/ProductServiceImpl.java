@@ -185,7 +185,7 @@ public class ProductServiceImpl implements ProductService {
         Pageable pageable = PageRequest.of(paginationParams.getPageNumber(), paginationParams.getPageSize(), Sort.by("name").ascending());
         ModelMap modelMap = new ModelMap();
         List<Product> products = productRepository.findAll(specification, pageable).getContent();
-        if (products.isEmpty()) {
+        if (products.isEmpty() && paginationParams.getPageNumber() > 0) {
             paginationParams.setPageNumber(paginationParams.getPageNumber() - 1);
             pageable = PageRequest.of(paginationParams.getPageNumber(), paginationParams.getPageSize(), Sort.by("name").ascending());
             products = productRepository.findAll(specification, pageable).getContent();
