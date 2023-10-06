@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.math.BigDecimal;
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/search")
 @SessionAttributes({"searchParams", "paginationParams"})
@@ -33,6 +36,9 @@ public class ProductSearchController {
     @PostMapping
     public ModelAndView searchByNameOrDescription(@RequestParam("keyWords") String keyWords, @ModelAttribute("searchParams") SearchParams searchParams, @ModelAttribute("paginationParams") PaginationParams paginationParams) {
         searchParams.setKeyWords(keyWords);
+        searchParams.setCategoryName(null);
+        searchParams.setPriceTo(null);
+        searchParams.setPriceFrom(null);
         paginationParams.setPageNumber(0);
         return productService.searchProducts(searchParams, paginationParams);
     }
@@ -42,10 +48,23 @@ public class ProductSearchController {
         paginationParams.setPageNumber(pageNumber);
         return productService.searchProducts(searchParams, paginationParams);
     }
+
     @PostMapping("/applyFilter")
-    public ModelAndView applyFilter(@ModelAttribute("searchParams") SearchParams searchParams, @SessionAttribute("paginationParams") PaginationParams paginationParams) {
+    public ModelAndView applyFilter(@RequestParam(value = "categoryName", required = false) String categoryName, @RequestParam(value = "priceFrom", required = false) BigDecimal priceFrom, @RequestParam(value = "priceTo", required = false) BigDecimal priceTo, @SessionAttribute("searchParams") SearchParams searchParams, @SessionAttribute("paginationParams") PaginationParams paginationParams) {
+        paginationParams.setPageNumber(0);
+        if (Optional.ofNullable(categoryName).isPresent()) {
+            searchParams.setCategoryName(categoryName);
+        }
+        if (Optional.ofNullable(priceFrom).isPresent()) {
+            searchParams.setPriceFrom(priceFrom);
+        }
+        if (Optional.ofNullable(priceTo).isPresent()) {
+            searchParams.setPriceTo(priceTo);
+        }
+        searchParams.setKeyWords("");
         return productService.searchProducts(searchParams, paginationParams);
     }
+
     @GetMapping("/setPageSize/{pageSize}")
     public ModelAndView changePageSize(@PathVariable int pageSize, @SessionAttribute("searchParams") SearchParams searchParams, @SessionAttribute("paginationParams") PaginationParams paginationParams) {
         paginationParams.setPageSize(pageSize);
