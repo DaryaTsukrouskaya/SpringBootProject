@@ -45,6 +45,19 @@
         </div>
     </nav>
 </header>
+<div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false" style="margin: 15px">
+        Размер страницы
+    </button>
+    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu">
+        <a class="dropdown-item" href="/search/setPageSize/1">1</a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="/search/setPageSize/2">2</a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="/search/setPageSize/3">3</a>
+    </div>
+</div>
 <div class="row">
     <div class="col-lg-6 col-md-6">
         <c:forEach items="${products}" var="product">
@@ -85,7 +98,9 @@
         <form method="post" action="/search/applyFilter">
             <select id="categoryName" name="categoryName">
                 <c:forEach items="${categories}" var="category">
-                    <option name="category" <c:if test="${searchParams.getCategoryName().equals(category.getName())}">selected</c:if> value="${category.getName()}">
+                    <option name="category"
+                            <c:if test="${searchParams.getCategoryName().equals(category.getName())}">selected</c:if>
+                            value="${category.getName()}">
                             ${category.getName()}
                     </option>
                 </c:forEach>
