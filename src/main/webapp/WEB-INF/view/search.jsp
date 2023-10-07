@@ -32,7 +32,7 @@
                     </li>
                 </ul>
             </div>
-            <form method="post" action="/search">
+            <form method="post" action="/search/applyFilter">
                 <div class="input-group">
                     <input type="search" id="keyWords" class="form-control" name="keyWords" placeholder="Поиск"
                            minlength="3"/>
@@ -85,7 +85,7 @@
         <form method="post" action="/search/applyFilter">
             <select id="categoryName" name="categoryName">
                 <c:forEach items="${categories}" var="category">
-                    <option value="${category.getName()}">
+                    <option name="category" <c:if test="${searchParams.getCategoryName().equals(category.getName())}">selected</c:if> value="${category.getName()}">
                             ${category.getName()}
                     </option>
                 </c:forEach>

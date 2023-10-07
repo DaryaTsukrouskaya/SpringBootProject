@@ -50,18 +50,14 @@ public class ProductSearchController {
     }
 
     @PostMapping("/applyFilter")
-    public ModelAndView applyFilter(@RequestParam(value = "categoryName", required = false) String categoryName, @RequestParam(value = "priceFrom", required = false) BigDecimal priceFrom, @RequestParam(value = "priceTo", required = false) BigDecimal priceTo, @SessionAttribute("searchParams") SearchParams searchParams, @SessionAttribute("paginationParams") PaginationParams paginationParams) {
+    public ModelAndView applyFilter(@RequestParam(value = "keyWords", required = false) String keyWords, @RequestParam(value = "categoryName", required = false) String categoryName, @RequestParam(value = "priceFrom", required = false) BigDecimal priceFrom, @RequestParam(value = "priceTo", required = false) BigDecimal priceTo, @SessionAttribute("searchParams") SearchParams searchParams, @SessionAttribute("paginationParams") PaginationParams paginationParams) {
         paginationParams.setPageNumber(0);
         if (Optional.ofNullable(categoryName).isPresent()) {
             searchParams.setCategoryName(categoryName);
         }
-        if (Optional.ofNullable(priceFrom).isPresent()) {
-            searchParams.setPriceFrom(priceFrom);
-        }
-        if (Optional.ofNullable(priceTo).isPresent()) {
-            searchParams.setPriceTo(priceTo);
-        }
-        searchParams.setKeyWords("");
+        searchParams.setPriceFrom(priceFrom);
+        searchParams.setPriceTo(priceTo);
+        searchParams.setKeyWords(keyWords);
         return productService.searchProducts(searchParams, paginationParams);
     }
 
