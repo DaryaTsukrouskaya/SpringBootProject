@@ -35,11 +35,11 @@ public class ProductSearchController {
 
     @PostMapping
     public ModelAndView searchByNameOrDescription(@RequestParam("keyWords") String keyWords, @ModelAttribute("searchParams") SearchParams searchParams, @ModelAttribute("paginationParams") PaginationParams paginationParams) {
+        paginationParams.setPageNumber(0);
         searchParams.setKeyWords(keyWords);
         searchParams.setCategoryName(null);
         searchParams.setPriceTo(null);
         searchParams.setPriceFrom(null);
-        paginationParams.setPageNumber(0);
         return productService.searchProducts(searchParams, paginationParams);
     }
 
