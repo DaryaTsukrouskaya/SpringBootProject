@@ -20,6 +20,4 @@ public interface ProductRepository extends JpaRepository<Product, Integer>, JpaS
     List<Product> findByCategoryId(int id);
 
     Page<Product> findByCategoryId(int id, Pageable page);
-
-    Product findById(int id);
 }
