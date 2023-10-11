@@ -12,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+
 @Repository
 @Transactional
 public interface ProductRepository extends JpaRepository<Product, Integer>, JpaSpecificationExecutor<Product> {
@@ -21,9 +22,4 @@ public interface ProductRepository extends JpaRepository<Product, Integer>, JpaS
     Page<Product> findByCategoryId(int id, Pageable page);
 
     Product findById(int id);
-
-    Page<Product> findAllByCategoryIdAndNameContaining(int id, String name, Pageable pageable);
-    @Query(value = "select p from Product p where p.price > :price")
-    List<Product> findAllWithPriceGreaterThen(@Param("price")int price);
-
 }
