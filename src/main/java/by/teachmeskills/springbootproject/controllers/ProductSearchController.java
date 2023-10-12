@@ -44,7 +44,7 @@ public class ProductSearchController {
     }
 
     @GetMapping("/pagination/{pageNumber}")
-    public ModelAndView searchByNameOrDescriptionPaginated(@PathVariable int pageNumber, @SessionAttribute("searchParams") SearchParams searchParams, @SessionAttribute("paginationParams") PaginationParams paginationParams) {
+    public ModelAndView searchPaginated(@PathVariable int pageNumber, @SessionAttribute("searchParams") SearchParams searchParams, @SessionAttribute("paginationParams") PaginationParams paginationParams) {
         paginationParams.setPageNumber(pageNumber);
         return productService.searchProducts(searchParams, paginationParams);
     }
