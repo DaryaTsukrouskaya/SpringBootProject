@@ -4,6 +4,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
@@ -60,4 +61,7 @@ public class User extends BaseEntity {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private List<Order> orders;
+    @ManyToMany(fetch = FetchType.EAGER)
+
+    private List<Role> roles;
 }

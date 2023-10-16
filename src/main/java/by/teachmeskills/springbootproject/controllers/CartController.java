@@ -11,7 +11,6 @@ import by.teachmeskills.springbootproject.services.impl.OrderServiceImpl;
 import by.teachmeskills.springbootproject.services.impl.ProductServiceImpl;
 
 import by.teachmeskills.springbootproject.services.impl.UserServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
