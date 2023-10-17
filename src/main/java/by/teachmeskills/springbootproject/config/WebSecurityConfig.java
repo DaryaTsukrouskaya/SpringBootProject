@@ -11,7 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
 @Configuration
 public class WebSecurityConfig {
@@ -22,7 +22,7 @@ public class WebSecurityConfig {
                 authorizeHttpRequests((authz) -> authz.requestMatchers(new AntPathRequestMatcher("/profile/**"),
                                 new AntPathRequestMatcher("/cart/checkout"), new AntPathRequestMatcher("/cart/createOrder")).
                         authenticated().requestMatchers(new AntPathRequestMatcher("/**/loadFromFile/**"), new AntPathRequestMatcher("/**/loadCsvFile/**"))
-                        .hasRole("ADMIN").anyRequest().permitAll()).formLogin(form -> form.loginPage("/login").defaultSuccessUrl("/home")
+                        .hasAuthority("ADMIN").anyRequest().permitAll()).formLogin(form -> form.loginPage("/login").defaultSuccessUrl("/home")
                         .usernameParameter("email").passwordParameter("password")).logout(logout -> logout.logoutUrl("/logout").invalidateHttpSession(true).clearAuthentication(true)
                         .permitAll());
         return http.build();

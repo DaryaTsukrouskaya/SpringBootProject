@@ -3,18 +3,16 @@ package by.teachmeskills.springbootproject.controllers;
 import by.teachmeskills.springbootproject.entities.User;
 import by.teachmeskills.springbootproject.enums.PagesPathEnum;
 import by.teachmeskills.springbootproject.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 @RestController
-@SessionAttributes({"user"})
 @RequestMapping("/register")
 public class RegisterController {
     private final UserService userService;
@@ -29,12 +27,7 @@ public class RegisterController {
     }
 
     @PostMapping
-    public ModelAndView registerUser(@ModelAttribute("user") User user, @RequestParam("repeatPassword") String repPass) {
+    public ModelAndView registerUser(@Valid @ModelAttribute("user") User user, @RequestParam("repeatPassword") String repPass) {
         return userService.registerUser(user, repPass);
-    }
-
-    @ModelAttribute("user")
-    public User setUpUser() {
-        return new User();
     }
 }

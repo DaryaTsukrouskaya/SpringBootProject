@@ -1,7 +1,6 @@
 package by.teachmeskills.springbootproject.controllers;
 
 import by.teachmeskills.springbootproject.entities.PaginationParams;
-import by.teachmeskills.springbootproject.entities.User;
 import by.teachmeskills.springbootproject.services.UserService;
 import by.teachmeskills.springbootproject.services.impl.UserServiceImpl;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,22 +25,23 @@ public class UserProfileController {
 
 
     @GetMapping
-    public ModelAndView getUserPage(@SessionAttribute("user") User user, @ModelAttribute("paginationParams") PaginationParams paginationParams) {
+    public ModelAndView getUserPage(@ModelAttribute("paginationParams") PaginationParams paginationParams) {
         paginationParams.setPageNumber(0);
-        return userService.userServicePage(user, paginationParams);
+        return userService.userServicePage(userService.getCurrentUser(), paginationParams);
     }
 
     @GetMapping("/pagination/{page}")
-    public ModelAndView userPagePaginated(@PathVariable int page, @SessionAttribute("user") User user, @SessionAttribute("paginationParams") PaginationParams paginationParams) {
+    public ModelAndView userPagePaginated(@PathVariable int page, @SessionAttribute("paginationParams") PaginationParams paginationParams) {
         paginationParams.setPageNumber(page);
-        return userService.userServicePage(user, paginationParams);
+        return userService.userServicePage(userService.getCurrentUser(), paginationParams);
     }
 
     @GetMapping("/changeSize/{size}")
-    public ModelAndView changePage(@PathVariable int size, @SessionAttribute("user") User user, @SessionAttribute("paginationParams") PaginationParams paginationParams) {
+    public ModelAndView changePage(@PathVariable int size, @SessionAttribute("paginationParams") PaginationParams paginationParams) {
         paginationParams.setPageSize(size);
-        return userService.userServicePage(user, paginationParams);
+        return userService.userServicePage(userService.getCurrentUser(), paginationParams);
     }
+
     @ModelAttribute("paginationParams")
     public PaginationParams setPaginationParams() {
         return new PaginationParams();

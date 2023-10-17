@@ -20,8 +20,5 @@ import lombok.experimental.SuperBuilder;
 @Table(name = "roles")
 public class Role extends BaseEntity {
     @Column(name = "name")
-    @JoinTable(name = "users_roles",
-            joinColumns = {@JoinColumn(name = "userId")},
-            inverseJoinColumns = {@JoinColumn(name = "roleId")})
     private String name;
 }

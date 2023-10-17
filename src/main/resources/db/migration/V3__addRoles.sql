@@ -1,10 +1,11 @@
 DROP TABLE IF EXISTS eshop.roles;
 CREATE TABLE IF NOT EXISTS eshop.roles(
-    id INT NOT NULL AUTO_INCREMENT;
+    id INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(10) NOT NULL,
     PRIMARY KEY(id));
 
-DROP TABLE IF EXISTS eshop.users_roles(
+DROP TABLE IF EXISTS eshop.users_roles;
+CREATE TABLE IF NOT EXISTS eshop.users_roles(
     userId INT NOT NULL,
     roleId INT NOT NULL,
     PRIMARY KEY (userId,roleId),
@@ -16,3 +17,7 @@ DROP TABLE IF EXISTS eshop.users_roles(
     REFERENCES eshop.roles(id)
     ON DELETE CASCADE
     ON UPDATE CASCADE);
+
+INSERT INTO eshop.roles(name) VALUES ("ADMIN");
+INSERT INTO eshop.roles(name) VALUES ("USER");
+
