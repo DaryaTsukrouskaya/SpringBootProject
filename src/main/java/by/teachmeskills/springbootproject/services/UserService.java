@@ -10,7 +10,7 @@ public interface UserService extends BaseService<User> {
 
     User findById(int id);
 
-    ModelAndView authenticate();
+    ModelAndView authenticate(boolean error);
 
     ModelAndView userServicePage(User user, PaginationParams paginationParams);
 

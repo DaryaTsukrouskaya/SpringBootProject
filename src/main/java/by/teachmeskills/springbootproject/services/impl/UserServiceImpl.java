@@ -81,8 +81,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ModelAndView authenticate() {
+    public ModelAndView authenticate(boolean error) {
         ModelMap modelMap = new ModelMap();
+        if (error == true) {
+            modelMap.addAttribute("state", "Неверный логин или пароль");
+        }
         return new ModelAndView(PagesPathEnum.SIGN_IN_PAGE.getPath(), modelMap);
     }
 
