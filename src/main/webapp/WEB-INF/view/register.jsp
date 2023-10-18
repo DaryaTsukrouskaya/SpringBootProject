@@ -61,11 +61,11 @@
                     <span id="matchingError" style="display: none">*Пароли не совпадают!</span>
                     <div class="invalid-feedback">Повторите пароль!</div>
                 </div>
+                <br>
+                <span>${state}</span>
                 <a href="/register">
                     <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
                 </a>
-                <br>
-                <span>${state}</span>
             </form>
         </div>
     </div>
