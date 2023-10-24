@@ -19,7 +19,8 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable).
-                authorizeHttpRequests((authz) -> authz.requestMatchers(new AntPathRequestMatcher("/profile/**"),
+                authorizeHttpRequests((authz) ->
+                        authz.requestMatchers(new AntPathRequestMatcher("/profile/**"),
                                 new AntPathRequestMatcher("/cart/checkout"), new AntPathRequestMatcher("/cart/createOrder")).
                         authenticated().requestMatchers(new AntPathRequestMatcher("/**/loadFromFile/**"), new AntPathRequestMatcher("/**/loadCsvFile/**"))
                         .hasAuthority("ADMIN").anyRequest().permitAll()).formLogin(form -> form.loginPage("/login").defaultSuccessUrl("/home").failureUrl("/login?error=true")
