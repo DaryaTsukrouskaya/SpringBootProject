@@ -12,7 +12,7 @@ public interface UserService extends BaseService<User> {
 
     ModelAndView authenticate(boolean error);
 
-    ModelAndView userServicePage(User user, PaginationParams paginationParams);
+    ModelAndView userProfilePage(User user, PaginationParams paginationParams);
 
     ModelAndView checkout(Cart cart);
 

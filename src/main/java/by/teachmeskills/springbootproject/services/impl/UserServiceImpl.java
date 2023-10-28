@@ -22,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -34,10 +33,10 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, CategoryServiceImpl categoryRepository, ProductServiceImpl productService,
+    public UserServiceImpl(UserRepository userRepository, CategoryService categoryService, ProductService productService,
                            OrderRepository orderRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.categoryService = categoryRepository;
+        this.categoryService = categoryService;
         this.productService = productService;
         this.orderRepository = orderRepository;
         this.passwordEncoder = passwordEncoder;
@@ -90,7 +89,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ModelAndView userServicePage(User user, PaginationParams paginationParams) {
+    public ModelAndView userProfilePage(User user, PaginationParams paginationParams) {
         ModelMap modelMap = new ModelMap();
         modelMap.addAttribute("user", user);
         if (orderRepository.findByUserId(user.getId()).isEmpty()) {

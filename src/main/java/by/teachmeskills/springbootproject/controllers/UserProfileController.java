@@ -27,19 +27,19 @@ public class UserProfileController {
     @GetMapping
     public ModelAndView getUserPage(@ModelAttribute("paginationParams") PaginationParams paginationParams) {
         paginationParams.setPageNumber(0);
-        return userService.userServicePage(userService.getCurrentUser(), paginationParams);
+        return userService.userProfilePage(userService.getCurrentUser(), paginationParams);
     }
 
     @GetMapping("/pagination/{page}")
     public ModelAndView userPagePaginated(@PathVariable int page, @SessionAttribute("paginationParams") PaginationParams paginationParams) {
         paginationParams.setPageNumber(page);
-        return userService.userServicePage(userService.getCurrentUser(), paginationParams);
+        return userService.userProfilePage(userService.getCurrentUser(), paginationParams);
     }
 
     @GetMapping("/changeSize/{size}")
     public ModelAndView changePage(@PathVariable int size, @SessionAttribute("paginationParams") PaginationParams paginationParams) {
         paginationParams.setPageSize(size);
-        return userService.userServicePage(userService.getCurrentUser(), paginationParams);
+        return userService.userProfilePage(userService.getCurrentUser(), paginationParams);
     }
 
     @ModelAttribute("paginationParams")

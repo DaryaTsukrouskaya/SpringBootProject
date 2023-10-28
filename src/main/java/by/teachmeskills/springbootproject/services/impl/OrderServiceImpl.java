@@ -29,7 +29,7 @@ public class OrderServiceImpl implements OrderService {
     private final CategoryService categoryService;
 
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository, UserServiceImpl userService, CategoryServiceImpl categoryService) {
+    public OrderServiceImpl(OrderRepository orderRepository, UserService userService, CategoryService categoryService) {
         this.orderRepository = orderRepository;
         this.userService = userService;
         this.categoryService = categoryService;
