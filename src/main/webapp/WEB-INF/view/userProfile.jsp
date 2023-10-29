@@ -6,6 +6,7 @@
     <title>Кабинет</title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -30,6 +31,16 @@
                     </li>
                 </ul>
             </div>
+            <form method="post" action="/search">
+                <div class="input-group">
+                    <input type="search" id="keyWords" class="form-control" name="keyWords" placeholder="Поиск"
+                           minlength="3"/>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa fa-search"></i>
+                    </button>
+                    </a>
+                </div>
+            </form>
         </div>
     </nav>
 </header>
@@ -83,6 +94,19 @@
         </div>
     </div>
 </section>
+<div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false" style="margin: 15px">
+        Размер страницы
+    </button>
+    <div class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenu">
+        <a class="dropdown-item" href="/profile/changeSize/1">1</a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="/profile/changeSize/2">2</a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="/profile/changeSize/3">3</a>
+    </div>
+</div>
 <section>
     <h5 class="mb-0" style="padding: 20px">История заказов</h5>
     <c:forEach items="${userOrders}" var="order">
@@ -111,6 +135,24 @@
         </a>
         </div>
     </c:forEach>
+    <nav>
+        <ul class="pagination justify-content-center" style="margin: 15px">
+            <li class="page-item"><a class="page-link"
+                                     href="/profile/pagination/${paginationParams.getPageNumber()-1}">Назад</a>
+            </li>
+            <li class="page-item"><a class="page-link"
+                                     href="/profile/pagination/0">1</a>
+            </li>
+            <li class="page-item"><a class="page-link"
+                                     href="/profile/pagination/1">2</a>
+            </li>
+            <li class="page-item"><a class="page-link"
+                                     href="/profile/pagination/2">3</a></li>
+            <li class="page-item"><a class="page-link"
+                                     href="/profile/pagination/${paginationParams.getPageNumber()+1}">Вперед</a>
+            </li>
+        </ul>
+    </nav>
 </section>
 </body>
 </html>

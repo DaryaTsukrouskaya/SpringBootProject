@@ -1,6 +1,5 @@
 package by.teachmeskills.springbootproject.controllers;
 
-import by.teachmeskills.springbootproject.exceptions.DBConnectionException;
 import by.teachmeskills.springbootproject.services.ProductService;
 import by.teachmeskills.springbootproject.services.impl.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +14,13 @@ import org.springframework.web.servlet.ModelAndView;
 public class ProductController {
     private final ProductService productService;
 
-    @Autowired
     public ProductController(ProductServiceImpl productService) {
         this.productService = productService;
     }
 
 
     @GetMapping("/{id}")
-    public ModelAndView getProductPage(@PathVariable int id) throws DBConnectionException {
+    public ModelAndView getProductPage(@PathVariable int id) {
         return productService.findProductByIdForProductPage(id);
     }
 }

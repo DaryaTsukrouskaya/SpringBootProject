@@ -2,9 +2,7 @@ package by.teachmeskills.springbootproject.controllers;
 
 import by.teachmeskills.springbootproject.entities.User;
 import by.teachmeskills.springbootproject.enums.PagesPathEnum;
-import by.teachmeskills.springbootproject.exceptions.DBConnectionException;
 import by.teachmeskills.springbootproject.services.UserService;
-import by.teachmeskills.springbootproject.services.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -21,7 +19,6 @@ import org.springframework.web.servlet.ModelAndView;
 public class RegisterController {
     private final UserService userService;
 
-    @Autowired
     public RegisterController(UserService userService) {
         this.userService = userService;
     }
@@ -32,7 +29,7 @@ public class RegisterController {
     }
 
     @PostMapping
-    public ModelAndView registerUser(@ModelAttribute("user") User user, @RequestParam("repeatPassword") String repPass) throws DBConnectionException {
+    public ModelAndView registerUser(@ModelAttribute("user") User user, @RequestParam("repeatPassword") String repPass) {
         return userService.registerUser(user, repPass);
     }
 

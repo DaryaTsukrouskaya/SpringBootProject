@@ -1,23 +1,21 @@
 package by.teachmeskills.springbootproject.services;
 
 import by.teachmeskills.springbootproject.entities.Cart;
+import by.teachmeskills.springbootproject.entities.PaginationParams;
 import by.teachmeskills.springbootproject.entities.User;
-import by.teachmeskills.springbootproject.exceptions.DBConnectionException;
 import org.springframework.web.servlet.ModelAndView;
 
 public interface UserService extends BaseService<User> {
-    ModelAndView registerUser(User user, String repPassword) throws DBConnectionException;
+    ModelAndView registerUser(User user, String repPassword);
 
-    User findById(int id) throws DBConnectionException;
+    User findById(int id);
 
-    ModelAndView authenticate(String email, String password) throws DBConnectionException;
+    ModelAndView authenticate(String email, String password);
 
-    void updatePassword(String password, String email) throws DBConnectionException;
+    ModelAndView userServicePage(User user, PaginationParams paginationParams);
 
-    void updateEmail(String previousEmail, String newEmail) throws DBConnectionException;
-
-    ModelAndView userServicePage(User user) throws DBConnectionException;
     ModelAndView checkout(Cart cart);
+
     void update(User user);
 
 }

@@ -37,7 +37,8 @@
             </div>
             <form method="post" action="/search">
                 <div class="input-group">
-                    <input type="search" id="keyWords" class="form-control" name="keyWords" placeholder="Поиск"/>
+                    <input type="search" id="keyWords" class="form-control" name="keyWords" placeholder="Поиск"
+                           minlength="3"/>
                     <button type="submit" class="btn btn-primary">
                         <i class="fa fa-search"></i>
                     </button>
@@ -47,7 +48,19 @@
         </div>
     </nav>
 </header>
-
+<div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false" style="margin: 15px">
+        Размер страницы
+    </button>
+    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu">
+        <a class="dropdown-item" href="/category/changeSize/${category.getId()}/1">1</a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="/category/changeSize/${category.getId()}/2">2</a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="/category/changeSize/${category.getId()}/3">3</a>
+    </div>
+</div>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <div class="row">
     <c:forEach items="${category.getProducts()}" var="product">
@@ -67,6 +80,26 @@
         </div>
     </c:forEach>
 </div>
+<nav>
+    <ul class="pagination justify-content-center" style="margin: 15px">
+        <li class="page-item"><a class="page-link"
+                                 href="/category/pagination/${category.getId()}/${paginationParams.getPageNumber()-1}">Назад</a>
+        </li>
+        <li class="page-item"><a class="page-link"
+                                 href="/category/pagination/${category.getId()}/0">1</a>
+        </li>
+        <li class="page-item"><a class="page-link"
+                                 href="/category/pagination/${category.getId()}/1">2</a>
+        </li>
+        <li class="page-item"><a class="page-link"
+                                 href="/category/pagination/${category.getId()}/2">3</a></li>
+        <li class="page-item"><a class="page-link"
+                                 href="/category/pagination/${category.getId()}/${paginationParams.getPageNumber()+1}">Вперед</a>
+        </li>
+    </ul>
+</nav>
+<br>
+<br>
 <form method="POST" action="/category/loadFromFile/${category.getId()}" enctype="multipart/form-data"
       class="file-import">
     <label for="file-upload" class="custom-file-upload"

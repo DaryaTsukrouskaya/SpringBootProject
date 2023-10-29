@@ -1,13 +1,14 @@
 package by.teachmeskills.springbootproject.repositories;
 
-
 import by.teachmeskills.springbootproject.entities.Category;
-import by.teachmeskills.springbootproject.exceptions.DBConnectionException;
+import jakarta.transaction.Transactional;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface CategoryRepository extends BaseRepository<Category> {
-    Category findById(int id) throws DBConnectionException;
-
+@Repository
+@Transactional
+public interface CategoryRepository extends JpaRepository<Category, Integer> {
     Category findByName(String name);
 
-    void update(Category category);
+    Category findById(int id);
 }

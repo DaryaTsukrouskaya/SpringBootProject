@@ -2,7 +2,6 @@ package by.teachmeskills.springbootproject.controllers;
 
 import by.teachmeskills.springbootproject.entities.User;
 import by.teachmeskills.springbootproject.enums.PagesPathEnum;
-import by.teachmeskills.springbootproject.exceptions.DBConnectionException;
 import by.teachmeskills.springbootproject.services.UserService;
 import by.teachmeskills.springbootproject.services.impl.UserServiceImpl;
 import jakarta.validation.Valid;
@@ -25,7 +24,6 @@ import java.util.Objects;
 public class LoginController {
     private final UserService userService;
 
-    @Autowired
     public LoginController(UserServiceImpl userService) {
         this.userService = userService;
     }
@@ -36,7 +34,7 @@ public class LoginController {
     }
 
     @PostMapping
-    public ModelAndView login(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, ModelAndView modelAndView) throws DBConnectionException {
+    public ModelAndView login(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, ModelAndView modelAndView) {
         if (bindingResult.hasFieldErrors("email") || bindingResult.hasFieldErrors("password")) {
             populateError("email", modelAndView, bindingResult);
             populateError("password", modelAndView, bindingResult);
