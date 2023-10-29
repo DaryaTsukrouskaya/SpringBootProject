@@ -10,12 +10,14 @@ public interface UserService extends BaseService<User> {
 
     User findById(int id);
 
-    ModelAndView authenticate(String email, String password);
+    ModelAndView authenticate(boolean error);
 
-    ModelAndView userServicePage(User user, PaginationParams paginationParams);
+    ModelAndView userProfilePage(User user, PaginationParams paginationParams);
 
     ModelAndView checkout(Cart cart);
 
     void update(User user);
+
+    User getCurrentUser();
 
 }

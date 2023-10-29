@@ -1,7 +1,6 @@
 package by.teachmeskills.springbootproject.controllers;
 
 import by.teachmeskills.springbootproject.entities.Cart;
-import by.teachmeskills.springbootproject.entities.User;
 import by.teachmeskills.springbootproject.enums.PagesPathEnum;
 import by.teachmeskills.springbootproject.exceptions.NoOrderAddressException;
 import by.teachmeskills.springbootproject.services.OrderService;
@@ -9,9 +8,7 @@ import by.teachmeskills.springbootproject.services.ProductService;
 import by.teachmeskills.springbootproject.services.UserService;
 import by.teachmeskills.springbootproject.services.impl.OrderServiceImpl;
 import by.teachmeskills.springbootproject.services.impl.ProductServiceImpl;
-
 import by.teachmeskills.springbootproject.services.impl.UserServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -19,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -68,8 +64,8 @@ public class CartController {
     }
 
     @PostMapping("/createOrder")
-    public ModelAndView buy(@ModelAttribute("cart") Cart cart, @SessionAttribute("user") User user, @RequestParam("address") String address) throws NoOrderAddressException {
-        return orderService.createUserOrder(user, cart, address);
+    public ModelAndView buy(@ModelAttribute("cart") Cart cart, @RequestParam("address") String address) throws NoOrderAddressException {
+        return orderService.createUserOrder(userService.getCurrentUser(), cart, address);
     }
 
     @ModelAttribute("cart")

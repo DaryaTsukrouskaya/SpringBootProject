@@ -1,6 +1,3 @@
-DROP SCHEMA IF EXISTS eshop;
-CREATE SCHEMA IF NOT EXISTS eshop;
-
 DROP TABLE IF EXISTS eshop.categories;
 CREATE TABLE IF NOT EXISTS eshop.categories(
     id INT NOT NULL AUTO_INCREMENT,
@@ -17,7 +14,7 @@ CREATE TABLE IF NOT EXISTS eshop.users(
     surname VARCHAR(20) NOT NULL,
     birthDate DATETIME NOT NULL,
     email VARCHAR(60) NOT NULL,
-    password VARCHAR(20) NOT NULL,
+    password VARCHAR(200) NOT NULL,
     PRIMARY KEY(id),
     UNIQUE INDEX IDX_users_id_UNIQUE(id ASC),
     UNIQUE INDEX IDX_users_email_UNIQUE(email ASC));

@@ -1,6 +1,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,6 +35,16 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/cart">Корзина</a>
                     </li>
+                    <sec:authorize access="isAuthenticated()">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/logout">Выйти</a>
+                        </li>
+                    </sec:authorize>
+                    <sec:authorize access="!isAuthenticated()">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/login">Войти</a>
+                        </li>
+                    </sec:authorize>
                 </ul>
             </div>
             <form method="post" action="/search">
@@ -100,16 +112,18 @@
 </nav>
 <br>
 <br>
-<form method="POST" action="/category/loadFromFile/${category.getId()}" enctype="multipart/form-data"
-      class="file-import">
-    <label for="file-upload" class="custom-file-upload"
-           style="padding: 15px;margin: 0px 0px 15px 15px;border: 1px solid #ccc">
-        <input id="file-upload" name="file" type="file" class="title" accept=".csv">
-        <button type="submit" class="btn btn-dark">Импортировать продукты категории</button>
-    </label>
-</form>
-<form method="POST" action="/category/loadCsvFile/${category.getId()}">
-    <button type="submit" class="btn btn-dark" style="margin: 15px">Экспортировать продукты категории</button>
-</form>
+<sec:authorize access="hasAuthority('ADMIN')">
+    <form method="POST" action="/category/loadFromFile/${category.getId()}" enctype="multipart/form-data"
+          class="file-import">
+        <label for="file-upload" class="custom-file-upload"
+               style="padding: 15px;margin: 0px 0px 15px 15px;border: 1px solid #ccc">
+            <input id="file-upload" name="file" type="file" class="title" accept=".csv">
+            <button type="submit" class="btn btn-dark">Импортировать продукты категории</button>
+        </label>
+    </form>
+    <form method="POST" action="/category/loadCsvFile/${category.getId()}">
+        <button type="submit" class="btn btn-dark" style="margin: 15px">Экспортировать продукты категории</button>
+    </form>
+</sec:authorize>
 </body>
 </html>
