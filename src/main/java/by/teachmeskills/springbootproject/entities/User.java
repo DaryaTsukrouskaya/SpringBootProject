@@ -59,7 +59,7 @@ public class User extends BaseEntity {
             message = "пароль не должен содержать пробелы")
     @Column(name = "password")
     private String password;
-    @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private List<Order> orders;

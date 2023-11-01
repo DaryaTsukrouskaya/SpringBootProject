@@ -1,0 +1,38 @@
+version: "2.18.1"
+services:
+  mysqldb:
+    image: mysql:8
+    container_name: mysqldb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 1111
+      MYSQL_DATABASE: eshop
+    ports:
+      - "3306:3306"
+    volumes:
+      - eshop_db_data:/var/lib/eshop
+    networks:
+      - eshop_network
+
+  eshop:
+    container_name: eshop
+    restart: always
+    depends_on:
+      - mysqldb
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      SERVER_PORT: 8080
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb/eshop
+    networks:
+      - eshop_network
+volumes:
+  eshop_db_data:
+networks:
+  eshop_network:
+
+
+
