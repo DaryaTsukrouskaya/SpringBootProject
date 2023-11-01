@@ -5,7 +5,6 @@ import by.teachmeskills.springbootproject.entities.Cart;
 import by.teachmeskills.springbootproject.entities.Order;
 import by.teachmeskills.springbootproject.entities.User;
 import by.teachmeskills.springbootproject.enums.PagesPathEnum;
-import by.teachmeskills.springbootproject.exceptions.DBConnectionException;
 import by.teachmeskills.springbootproject.exceptions.NoOrderAddressException;
 import by.teachmeskills.springbootproject.repositories.OrderRepository;
 import by.teachmeskills.springbootproject.services.CategoryService;
@@ -73,6 +72,7 @@ public class OrderServiceImpl implements OrderService {
         }
         user.getOrders().add(order);
         userService.update(user);
+        cart.clear();
         ModelMap modelMap = new ModelMap();
         modelMap.addAttribute("categories", categoryService.read());
         return new ModelAndView(PagesPathEnum.HOME_PAGE.getPath(), modelMap);
