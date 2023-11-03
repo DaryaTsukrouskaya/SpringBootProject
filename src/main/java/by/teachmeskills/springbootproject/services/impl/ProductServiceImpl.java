@@ -84,7 +84,7 @@ public class ProductServiceImpl implements ProductService {
         Category category = categoryService.findById(id);
         Pageable pageable = PageRequest.of(params.getPageNumber(), params.getPageSize(), Sort.by("name").ascending());
         category.setProducts(productRepository.findByCategoryId(id, pageable).getContent());
-        if (category.getProducts().isEmpty()) {
+        if (category.getProducts().isEmpty() && params.getPageNumber() > 0) {
             params.setPageNumber(params.getPageNumber() - 1);
             pageable = PageRequest.of(params.getPageNumber(), params.getPageSize(), Sort.by("name").ascending());
             category.setProducts(productRepository.findByCategoryId(id, pageable).getContent());
@@ -143,7 +143,7 @@ public class ProductServiceImpl implements ProductService {
         for (Product product : products) {
             productRepository.save(product);
         }
-        Pageable pageable = PageRequest.of(0, 0, Sort.by("name").ascending());
+        Pageable pageable = PageRequest.of(0, 1, Sort.by("name").ascending());
         Category category = categoryService.findById(id);
         category.setProducts(productRepository.findByCategoryId(id, pageable).getContent());
         modelMap.addAttribute("category", category);
