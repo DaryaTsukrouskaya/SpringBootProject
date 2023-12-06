@@ -48,7 +48,7 @@ public class User extends BaseEntity {
     @Past(message = "указанная дата еще не наступила")
     @Column(name = "birthDate")
     private LocalDate birthDate;
-    @Email(message = "некорректный пароль")
+    @Email(message = "некорректный email")
     @NotBlank(message = "email не должен быть пустым")
     @NotNull
     @Column(name = "email")
